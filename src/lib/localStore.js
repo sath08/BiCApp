@@ -2,7 +2,7 @@
 // All data persists across page reloads. Replace individual functions with Supabase calls later.
 
 import { mockStudents, mockTeachers, mockReadingLogs, mockEssays, mockBadges,
-  mockPointsLedger, mockNotifications, mockAssignments, mockPendingReviews } from './mockData'
+  mockPointsLedger, mockNotifications, mockAssignments, mockPendingReviews, mockLeaderboard } from './mockData'
 
 const KEYS = {
   students: 'bic_students',
@@ -34,7 +34,9 @@ function uid() {
 export function initStore() {
   if (read(KEYS.students)) return // already seeded
 
-  write(KEYS.students, mockStudents)
+  // Merge streak data from mockLeaderboard into student records
+  const streakByAnon = Object.fromEntries(mockLeaderboard.map(e => [e.anonymous_id, e.streak]))
+  write(KEYS.students, mockStudents.map(s => ({ ...s, reading_streak: streakByAnon[s.anonymous_id] ?? 0 })))
 
   write(KEYS.guardians, [
     { id: 'g1', student_id: '1', full_name: 'Sarah Johnson', relationship: 'Mother', phone: '425-555-0101', email: 'sjohnson@email.com', is_primary: true },
@@ -85,7 +87,17 @@ export function initStore() {
     review_completion_time: null,
   })))
 
-  write(KEYS.points, mockPointsLedger)
+  // Seed points ledger: use mockLeaderboard breakdown for each student
+  const studentIdByAnon = Object.fromEntries(mockStudents.map(s => [s.anonymous_id, s.id]))
+  const seededLedger = [...mockPointsLedger]
+  let pIdx = mockPointsLedger.length + 1
+  for (const entry of mockLeaderboard) {
+    const sid = studentIdByAnon[entry.anonymous_id]
+    if (!sid || sid === '1') continue // student 1 already has real ledger entries
+    if (entry.reading_points > 0) seededLedger.push({ id: `ps${pIdx++}`, student_id: sid, points: entry.reading_points, point_type: 'reading', description: 'Reading sessions', created_at: '2026-06-01T00:00:00Z' })
+    if (entry.writing_points > 0) seededLedger.push({ id: `ps${pIdx++}`, student_id: sid, points: entry.writing_points, point_type: 'writing_monthly', description: 'Writing assignments', created_at: '2026-06-01T00:00:00Z' })
+  }
+  write(KEYS.points, seededLedger)
   write(KEYS.badges, mockBadges)
   write(KEYS.notifications, mockNotifications)
   write(KEYS.writingAssignments, mockAssignments)
