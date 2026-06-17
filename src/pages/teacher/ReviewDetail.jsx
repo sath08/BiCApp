@@ -1,21 +1,26 @@
 import { useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { motion } from 'framer-motion'
-import { mockPendingReviews } from '../../lib/mockData'
-import { useSubmitReview } from '../../hooks/useEssays'
+import { useAuth } from '../../contexts/AuthContext'
+import { useEssay, useSubmitReview } from '../../hooks/useEssays'
+import { usePendingReviews } from '../../hooks/useEssays'
 import RubricScorer from '../../components/forms/RubricScorer'
 import Button from '../../components/ui/Button'
 import CelebrationOverlay from '../../components/ui/CelebrationOverlay'
 
 export default function ReviewDetail() {
   const { id } = useParams()
+  const { user } = useAuth()
   const navigate = useNavigate()
-  const submitReview = useSubmitReview()
+  const submitReviewMutation = useSubmitReview()
   const [action, setAction] = useState(null)
   const [success, setSuccess] = useState(false)
 
-  const review = mockPendingReviews.find(r => r.id === id)
+  // Look up essay by id from the pending reviews list (has student name attached)
+  const { data: pending = [] } = usePendingReviews(user?.id)
+  const { data: essay } = useEssay(id)
+
+  const review = pending.find(r => r.id === id) || essay
 
   const { register, handleSubmit, control, formState: { errors } } = useForm()
 
@@ -30,7 +35,7 @@ export default function ReviewDetail() {
 
   async function onSubmit(data) {
     if (!action) return
-    await submitReview.mutateAsync({ ...data, submission_id: id, action, review_completion_time: new Date().toISOString() })
+    await submitReviewMutation.mutateAsync({ essayId: id, reviewData: { ...data, action } })
     setSuccess(true)
   }
 
@@ -50,12 +55,13 @@ export default function ReviewDetail() {
 
       <div className="bg-gradient-to-r from-teal-700 to-teal-500 rounded-2xl p-5 text-white">
         <h1 className="text-xl font-extrabold">{review.book_title}</h1>
-        <p className="text-teal-100 text-sm">{review.student_anonymous_id} • {review.essay_type} • {review.assignment_type}</p>
+        <p className="text-teal-100 text-sm">
+          {review.student_anonymous_id} • {review.essay_type} • {review.assignment_type}
+        </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left: Essay */}
           <div className="space-y-4">
             <div className="bg-white rounded-2xl border border-purple-50 shadow-sm p-5">
               <h2 className="font-bold text-purple-900 mb-4">📖 Essay</h2>
@@ -65,7 +71,6 @@ export default function ReviewDetail() {
             </div>
           </div>
 
-          {/* Right: Rubric */}
           <div className="space-y-4">
             <div className="bg-white rounded-2xl border border-purple-50 shadow-sm p-5">
               <RubricScorer control={control} errors={errors} />
@@ -75,7 +80,7 @@ export default function ReviewDetail() {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">💪 Strengths</label>
                 <textarea
-                  {...register('strengths_text', { required: 'Strengths are required' })}
+                  {...register('strengths_text', { required: 'Required' })}
                   rows={3}
                   placeholder="What did the student do well?"
                   className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none resize-none"
@@ -85,7 +90,7 @@ export default function ReviewDetail() {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">📈 Areas for Growth</label>
                 <textarea
-                  {...register('growth_areas_text', { required: 'Growth areas are required' })}
+                  {...register('growth_areas_text', { required: 'Required' })}
                   rows={3}
                   placeholder="What can the student improve?"
                   className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none resize-none"
@@ -104,24 +109,14 @@ export default function ReviewDetail() {
             </div>
 
             <div className="flex gap-3">
-              <Button
-                type="submit"
-                variant="danger"
-                className="flex-1"
-                loading={submitReview.isPending && action === 'revision'}
+              <Button type="submit" variant="danger" className="flex-1"
+                loading={submitReviewMutation.isPending && action === 'revision'}
                 onClick={() => setAction('revision')}
-              >
-                ✏️ Request Revision
-              </Button>
-              <Button
-                type="submit"
-                variant="teal"
-                className="flex-1"
-                loading={submitReview.isPending && action === 'approve'}
+              >✏️ Request Revision</Button>
+              <Button type="submit" variant="teal" className="flex-1"
+                loading={submitReviewMutation.isPending && action === 'approve'}
                 onClick={() => setAction('approve')}
-              >
-                ✅ Approve Essay
-              </Button>
+              >✅ Approve Essay</Button>
             </div>
           </div>
         </div>

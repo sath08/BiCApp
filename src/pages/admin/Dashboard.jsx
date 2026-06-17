@@ -2,8 +2,8 @@ import { motion } from 'framer-motion'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import StatCard from '../../components/ui/StatCard'
 import Card from '../../components/ui/Card'
-import { mockStudents, mockTeachers } from '../../lib/mockData'
-import { getRecognitionLevel } from '../../lib/points'
+import { useStudents, useTeachers, useProgramStats } from '../../hooks/useStudent'
+import { getRecognitionLevel } from '../../lib/localStore'
 
 const monthlyData = [
   { month: 'Jan', students: 45, essays: 120 },
@@ -15,7 +15,12 @@ const monthlyData = [
 ]
 
 export default function AdminDashboard() {
-  const awardEligible = mockStudents.filter(s => s.total_points >= 25)
+  const { data: students = [] } = useStudents()
+  const { data: teachers = [] } = useTeachers()
+  const { data: stats } = useProgramStats()
+
+  const awardEligible = students.filter(s => s.total_points >= 25)
+
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-orange-600 to-orange-400 rounded-2xl p-6 text-white">
@@ -24,13 +29,12 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <StatCard emoji="👨‍🎓" label="Total Students" value={mockStudents.length} color="purple" index={0} />
-        <StatCard emoji="👩‍🏫" label="Teachers" value={mockTeachers.length} color="teal" index={1} />
-        <StatCard emoji="📝" label="Pending Reviews" value={9} color="orange" index={2} />
+        <StatCard emoji="👨‍🎓" label="Total Students" value={stats?.total_students ?? students.length} color="purple" index={0} />
+        <StatCard emoji="👩‍🏫" label="Teachers" value={stats?.teacher_count ?? teachers.length} color="teal" index={1} />
+        <StatCard emoji="📝" label="Pending Reviews" value={stats?.pending_reviews ?? 0} color="orange" index={2} />
         <StatCard emoji="🏆" label="Award Eligible" value={awardEligible.length} color="yellow" index={3} />
       </div>
 
-      {/* Growth Chart */}
       <Card>
         <h3 className="font-bold text-purple-900 mb-4">📈 Program Growth</h3>
         <ResponsiveContainer width="100%" height={200}>
@@ -50,32 +54,28 @@ export default function AdminDashboard() {
       </Card>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {/* Teacher Performance */}
         <Card>
           <h3 className="font-bold text-purple-900 mb-4">👩‍🏫 Teacher Performance</h3>
           <div className="space-y-3">
-            {mockTeachers.map(t => (
+            {teachers.filter(t => t.is_active).map(t => (
               <div key={t.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
                 <div>
                   <p className="font-semibold text-sm text-gray-800">{t.full_name}</p>
                   <p className="text-xs text-gray-400">{t.student_count} students</p>
                 </div>
-                <div className="text-right">
-                  <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${t.pending_reviews > 3 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
-                    {t.pending_reviews} pending
-                  </span>
-                </div>
+                <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${(t.pending_reviews || 0) > 3 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                  {t.pending_reviews || 0} pending
+                </span>
               </div>
             ))}
           </div>
         </Card>
 
-        {/* Award Eligible */}
         <Card>
           <h3 className="font-bold text-purple-900 mb-4">🏆 Award Eligible Students</h3>
           <div className="space-y-2">
             {awardEligible.slice(0, 5).map(s => {
-              const level = getRecognitionLevel(s.total_points)
+              const { current: level } = getRecognitionLevel(s.total_points)
               return (
                 <div key={s.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
                   <div>
@@ -86,6 +86,7 @@ export default function AdminDashboard() {
                 </div>
               )
             })}
+            {awardEligible.length === 0 && <p className="text-sm text-gray-400 text-center py-4">No eligible students yet.</p>}
           </div>
         </Card>
       </div>

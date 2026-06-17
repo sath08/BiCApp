@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { mockLeaderboard, mockStudents } from '../../lib/mockData'
-import { getRecognitionLevel } from '../../lib/points'
+import { useStudents } from '../../hooks/useStudent'
+import { getRecognitionLevel } from '../../lib/localStore'
 import Card from '../../components/ui/Card'
 
 const medals = ['🥇', '🥈', '🥉']
 const medalColors = ['text-yellow-500 bg-yellow-50', 'text-gray-500 bg-gray-50', 'text-orange-500 bg-orange-50']
 
 export default function AdminLeaderboard() {
-  const [category, setCategory] = useState('Total')
+  const { data: students = [] } = useStudents()
 
-  const fullLeaderboard = mockStudents
+  const fullLeaderboard = [...students]
     .sort((a, b) => b.total_points - a.total_points)
     .map((s, i) => ({ ...s, rank: i + 1 }))
 
@@ -21,27 +21,28 @@ export default function AdminLeaderboard() {
         <p className="text-orange-100 text-sm">Real names visible to coordinators only</p>
       </div>
 
-      {/* Top 3 Podium */}
-      <div className="grid grid-cols-3 gap-3">
-        {[fullLeaderboard[1], fullLeaderboard[0], fullLeaderboard[2]].map((s, i) => {
-          if (!s) return null
-          const podiumHeights = ['h-24', 'h-32', 'h-20']
-          return (
-            <motion.div
-              key={s.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className={`rounded-2xl p-3 text-center flex flex-col items-center justify-end ${podiumHeights[i]} ${medalColors[s.rank - 1]}`}
-            >
-              <div className="text-3xl mb-1">{medals[s.rank - 1]}</div>
-              <p className="text-xs font-bold leading-tight">{s.first_name} {s.last_name}</p>
-              <p className="text-sm font-extrabold">{s.total_points} pts</p>
-              <p className="text-xs opacity-70">G{s.grade}</p>
-            </motion.div>
-          )
-        })}
-      </div>
+      {fullLeaderboard.length >= 3 && (
+        <div className="grid grid-cols-3 gap-3">
+          {[fullLeaderboard[1], fullLeaderboard[0], fullLeaderboard[2]].map((s, i) => {
+            if (!s) return null
+            const podiumHeights = ['h-24', 'h-32', 'h-20']
+            return (
+              <motion.div
+                key={s.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className={`rounded-2xl p-3 text-center flex flex-col items-center justify-end ${podiumHeights[i]} ${medalColors[s.rank - 1]}`}
+              >
+                <div className="text-3xl mb-1">{medals[s.rank - 1]}</div>
+                <p className="text-xs font-bold leading-tight">{s.first_name} {s.last_name}</p>
+                <p className="text-sm font-extrabold">{s.total_points} pts</p>
+                <p className="text-xs opacity-70">G{s.grade}</p>
+              </motion.div>
+            )
+          })}
+        </div>
+      )}
 
       <Card className="p-0 overflow-hidden">
         <div className="overflow-x-auto">
@@ -55,7 +56,7 @@ export default function AdminLeaderboard() {
             </thead>
             <tbody className="divide-y divide-gray-50">
               {fullLeaderboard.map((s, i) => {
-                const level = getRecognitionLevel(s.total_points)
+                const { current: level } = getRecognitionLevel(s.total_points)
                 return (
                   <motion.tr
                     key={s.id}

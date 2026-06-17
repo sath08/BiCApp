@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { motion } from 'framer-motion'
 import Button from '../components/ui/Button'
+import { addStudent } from '../lib/localStore'
 
 const US_STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
 
@@ -17,10 +18,10 @@ export default function Register() {
   async function onSubmit(data) {
     setLoading(true)
     try {
-      // In production: insert into supabase
-      console.log('Registering student:', data)
-      await new Promise(r => setTimeout(r, 1000))
+      addStudent(data)
       setSuccess(true)
+    } catch (e) {
+      console.error(e)
     } finally {
       setLoading(false)
     }

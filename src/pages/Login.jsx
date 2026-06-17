@@ -34,16 +34,10 @@ export default function Login() {
     setLoading(true)
     setError('')
     try {
-      // Demo: mock login
-      if (data.email === 'admin@bic.edu') {
-        mockTeacherLogin('coordinator')
-        navigate('/admin/dashboard')
-      } else {
-        mockTeacherLogin('teacher')
-        navigate('/teacher/dashboard')
-      }
+      const session = signIn(data.email, data.password)
+      navigate(session.role === 'coordinator' ? '/admin/dashboard' : '/teacher/dashboard')
     } catch (e) {
-      setError('Invalid credentials')
+      setError(e.message || 'Invalid credentials')
     } finally {
       setLoading(false)
     }

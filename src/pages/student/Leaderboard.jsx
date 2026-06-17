@@ -1,35 +1,35 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { mockLeaderboard } from '../../lib/mockData'
+import { useStudentContext } from '../../contexts/StudentContext'
+import { useLeaderboard } from '../../hooks/useStudent'
 
 const GRADE_FILTERS = ['All', '1', '2', '3', '4', '5', '6', '7', '8', 'Grades 1-5', 'Grades 6-8']
 const CATEGORY_FILTERS = ['Total', 'Reading', 'Writing', 'Streaks']
-
 const medals = ['🥇', '🥈', '🥉']
 const medalBgs = ['bg-gradient-to-r from-yellow-400 to-yellow-300', 'bg-gradient-to-r from-gray-300 to-gray-200', 'bg-gradient-to-r from-orange-400 to-orange-300']
 
 export default function Leaderboard() {
+  const { student } = useStudentContext()
   const [gradeFilter, setGradeFilter] = useState('All')
   const [category, setCategory] = useState('Total')
 
-  function getScore(entry) {
-    if (category === 'Reading') return entry.reading_points
-    if (category === 'Writing') return entry.writing_points
-    if (category === 'Streaks') return entry.streak
-    return entry.total_points
+  const gradeArg = gradeFilter === 'All' ? null
+    : gradeFilter === 'Grades 1-5' ? '1-5'
+    : gradeFilter === 'Grades 6-8' ? '6-8'
+    : parseInt(gradeFilter)
+  const categoryArg = category.toLowerCase()
+
+  const { data: board = [] } = useLeaderboard(gradeArg, categoryArg === 'streaks' ? 'streak' : categoryArg)
+
+  function getScore(e) {
+    if (category === 'Reading') return e.reading_points
+    if (category === 'Writing') return e.writing_points
+    if (category === 'Streaks') return e.streak
+    return e.total_points
   }
 
-  const filtered = mockLeaderboard
-    .filter(e => {
-      if (gradeFilter === 'All') return true
-      if (gradeFilter === 'Grades 1-5') return e.grade <= 5
-      if (gradeFilter === 'Grades 6-8') return e.grade >= 6
-      return e.grade === parseInt(gradeFilter)
-    })
-    .sort((a, b) => getScore(b) - getScore(a))
-    .map((e, i) => ({ ...e, rank: i + 1 }))
-
-  const currentUser = filtered.find(e => e.isCurrentUser)
+  const enriched = board.map(e => ({ ...e, isCurrentUser: e.anonymous_id === student?.anonymousId }))
+  const currentUser = enriched.find(e => e.isCurrentUser)
 
   return (
     <div className="space-y-6 pb-20 md:pb-6">
@@ -38,11 +38,8 @@ export default function Leaderboard() {
         <p className="text-yellow-100 text-sm">How do you rank among your peers?</p>
       </div>
 
-      {/* My Rank */}
       {currentUser && (
-        <motion.div
-          initial={{ scale: 0.95 }}
-          animate={{ scale: 1 }}
+        <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }}
           className="bg-purple-800 text-white rounded-2xl p-4 flex items-center gap-4"
         >
           <div className="text-3xl font-extrabold text-yellow-300">#{currentUser.rank}</div>
@@ -57,19 +54,14 @@ export default function Leaderboard() {
         </motion.div>
       )}
 
-      {/* Filters */}
       <div className="space-y-3">
         <div>
           <p className="text-xs font-semibold text-gray-500 mb-2">CATEGORY</p>
           <div className="flex gap-2 flex-wrap">
             {CATEGORY_FILTERS.map(c => (
-              <button
-                key={c}
-                onClick={() => setCategory(c)}
+              <button key={c} onClick={() => setCategory(c)}
                 className={`px-3 py-1.5 rounded-xl text-sm font-semibold transition-all ${category === c ? 'bg-yellow-400 text-yellow-900 shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:border-yellow-300'}`}
-              >
-                {c}
-              </button>
+              >{c}</button>
             ))}
           </div>
         </div>
@@ -77,38 +69,28 @@ export default function Leaderboard() {
           <p className="text-xs font-semibold text-gray-500 mb-2">GRADE</p>
           <div className="flex gap-2 flex-wrap">
             {GRADE_FILTERS.map(g => (
-              <button
-                key={g}
-                onClick={() => setGradeFilter(g)}
+              <button key={g} onClick={() => setGradeFilter(g)}
                 className={`px-3 py-1.5 rounded-xl text-sm font-semibold transition-all ${gradeFilter === g ? 'bg-purple-700 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:border-purple-300'}`}
-              >
-                {g}
-              </button>
+              >{g}</button>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Top 3 */}
-      {filtered.length >= 3 && (
+      {enriched.length >= 3 && (
         <div className="grid grid-cols-3 gap-3">
-          {[filtered[1], filtered[0], filtered[2]].map((e, i) => {
+          {[enriched[1], enriched[0], enriched[2]].map((e, i) => {
             if (!e) return null
-            const originalRank = e.rank
-            const podiumOrder = [2, 1, 3]
             const heights = ['h-24', 'h-32', 'h-20']
             return (
-              <motion.div
-                key={e.anonymous_id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+              <motion.div key={e.anonymous_id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className={`${medalBgs[originalRank - 1]} rounded-2xl p-3 text-center flex flex-col items-center justify-end ${heights[i]} relative`}
+                className={`${medalBgs[e.rank - 1]} rounded-2xl p-3 text-center flex flex-col items-center justify-end ${heights[i]} relative`}
               >
                 {e.isCurrentUser && (
                   <div className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">YOU</div>
                 )}
-                <div className="text-3xl mb-1">{medals[originalRank - 1]}</div>
+                <div className="text-3xl mb-1">{medals[e.rank - 1]}</div>
                 <p className="text-xs font-bold text-gray-800 leading-tight">{e.anonymous_id.split(' ')[1]}</p>
                 <p className="text-sm font-extrabold text-gray-900">{getScore(e)}</p>
                 <p className="text-xs text-gray-600">G{e.grade}</p>
@@ -118,13 +100,9 @@ export default function Leaderboard() {
         </div>
       )}
 
-      {/* Full List */}
       <div className="bg-white rounded-2xl shadow-sm border border-purple-50 overflow-hidden">
-        {filtered.map((e, i) => (
-          <motion.div
-            key={e.anonymous_id}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
+        {enriched.map((e, i) => (
+          <motion.div key={e.anonymous_id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.03 }}
             className={`flex items-center gap-4 px-5 py-4 border-b border-gray-50 last:border-0 ${e.isCurrentUser ? 'bg-purple-50' : 'hover:bg-gray-50'} transition-colors`}
           >
@@ -144,6 +122,7 @@ export default function Leaderboard() {
             </div>
           </motion.div>
         ))}
+        {enriched.length === 0 && <p className="text-center text-gray-400 py-8">No data yet for this filter.</p>}
       </div>
     </div>
   )

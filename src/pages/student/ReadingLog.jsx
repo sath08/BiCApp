@@ -6,11 +6,9 @@ import ReadingLogForm from '../../components/forms/ReadingLogForm'
 import Card from '../../components/ui/Card'
 import StatCard from '../../components/ui/StatCard'
 import CelebrationOverlay from '../../components/ui/CelebrationOverlay'
-import { mockCurrentStudent } from '../../lib/mockData'
-
 export default function ReadingLog() {
   const { student } = useStudentContext()
-  const grade = student?.grade || mockCurrentStudent.grade
+  const grade = student?.grade || 4
   const { data: logs = [] } = useReadingLogs(student?.studentId)
   const addLog = useAddReadingLog()
   const [celebration, setCelebration] = useState(null)

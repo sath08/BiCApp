@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { RECOGNITION_LEVELS } from '../../lib/points'
-import { mockStudents } from '../../lib/mockData'
-import { getRecognitionLevel } from '../../lib/points'
+import { useStudents } from '../../hooks/useStudent'
 import Card from '../../components/ui/Card'
 
 const awardLevels = [
@@ -15,9 +13,10 @@ const awardLevels = [
 
 export default function Awards() {
   const [selectedLevel, setSelectedLevel] = useState(null)
+  const { data: students = [] } = useStudents()
 
   const eligibleStudents = selectedLevel
-    ? mockStudents.filter(s => s.total_points >= selectedLevel.minPts && s.total_points < (awardLevels[awardLevels.indexOf(selectedLevel) + 1]?.minPts ?? Infinity))
+    ? students.filter(s => s.total_points >= selectedLevel.minPts && s.total_points < (awardLevels[awardLevels.indexOf(selectedLevel) + 1]?.minPts ?? Infinity))
     : []
 
   return (
@@ -29,7 +28,7 @@ export default function Awards() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {awardLevels.map((level, i) => {
-          const eligible = mockStudents.filter(s =>
+          const eligible = students.filter(s =>
             s.total_points >= level.minPts &&
             s.total_points < (awardLevels[i + 1]?.minPts ?? Infinity)
           )
@@ -57,12 +56,8 @@ export default function Awards() {
         })}
       </div>
 
-      {/* Eligible Students List */}
       {selectedLevel && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
           <Card>
             <div className="flex items-center gap-3 mb-4">
               <span className="text-3xl">{selectedLevel.emoji}</span>

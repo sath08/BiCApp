@@ -7,17 +7,15 @@ import EssayForm from '../../components/forms/EssayForm'
 import Card from '../../components/ui/Card'
 import { StatusBadge } from '../../components/ui/Badge'
 import CelebrationOverlay from '../../components/ui/CelebrationOverlay'
-import { mockEssays } from '../../lib/mockData'
-
 export default function Writing() {
   const { student } = useStudentContext()
-  const { data: essays = mockEssays } = useEssays(student?.studentId)
+  const { data: essays = [] } = useEssays(student?.studentId)
   const submitEssay = useSubmitEssay()
   const [showForm, setShowForm] = useState(false)
   const [celebration, setCelebration] = useState(false)
 
   async function handleSubmit(data) {
-    await submitEssay.mutateAsync({ ...data, student_id: student?.studentId })
+    await submitEssay.mutateAsync({ studentId: student?.studentId, data })
     setShowForm(false)
     setCelebration(true)
   }

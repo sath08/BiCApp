@@ -1,6 +1,3 @@
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co'
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key'
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Supabase client — not used in local mode.
+// Swap this file with a real createClient() call when ready to connect to Supabase.
+export const supabase = null

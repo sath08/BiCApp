@@ -1,13 +1,17 @@
-import { mockStudents } from '../../lib/mockData'
-import { getRecognitionLevel } from '../../lib/points'
+import { useAuth } from '../../contexts/AuthContext'
+import { useStudentsForTeacher } from '../../hooks/useStudent'
+import { getRecognitionLevel } from '../../lib/localStore'
 import Card from '../../components/ui/Card'
 
 export default function TeacherStudents() {
+  const { user } = useAuth()
+  const { data: students = [] } = useStudentsForTeacher(user?.id)
+
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-teal-700 to-teal-500 rounded-2xl p-5 text-white">
         <h1 className="text-2xl font-extrabold mb-1">👥 My Students</h1>
-        <p className="text-teal-100 text-sm">{mockStudents.length} students assigned to you</p>
+        <p className="text-teal-100 text-sm">{students.length} students assigned to you</p>
       </div>
 
       <Card className="p-0 overflow-hidden">
@@ -23,8 +27,8 @@ export default function TeacherStudents() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {mockStudents.map(s => {
-                const level = getRecognitionLevel(s.total_points)
+              {students.map(s => {
+                const { current: level } = getRecognitionLevel(s.total_points)
                 return (
                   <tr key={s.id} className="hover:bg-teal-50 transition-colors">
                     <td className="px-5 py-4">
@@ -42,6 +46,9 @@ export default function TeacherStudents() {
                   </tr>
                 )
               })}
+              {students.length === 0 && (
+                <tr><td colSpan={5} className="text-center py-8 text-gray-400">No students assigned yet.</td></tr>
+              )}
             </tbody>
           </table>
         </div>

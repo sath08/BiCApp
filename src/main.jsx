@@ -4,8 +4,11 @@ import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider } from './contexts/AuthContext'
 import { StudentProvider } from './contexts/StudentContext'
+import { initStore } from './lib/localStore'
 import App from './App'
 import './index.css'
+
+initStore()
 
 const queryClient = new QueryClient({
   defaultOptions: {
