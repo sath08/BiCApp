@@ -8,45 +8,29 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#6B21A8',
-          light: '#9333EA',
-          dark: '#4C1D95',
-        },
-        secondary: {
-          DEFAULT: '#F97316',
-          light: '#FB923C',
-          dark: '#EA580C',
-        },
-        accent: {
-          teal: '#0D9488',
-          yellow: '#EAB308',
+          DEFAULT: '#4F46E5',
+          light: '#6366F1',
+          dark: '#3730A3',
         },
         bg: {
-          lavender: '#FAF5FF',
+          base: '#F8F9FB',
+          lavender: '#F8F9FB',
         },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
+      boxShadow: {
+        card: '0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06)',
+        'card-hover': '0 4px 16px 0 rgb(0 0 0 / 0.10)',
+      },
       animation: {
-        'shimmer': 'shimmer 2s linear infinite',
-        'bounce-slow': 'bounce 2s infinite',
-        'pulse-slow': 'pulse 3s infinite',
-        'wiggle': 'wiggle 1s ease-in-out infinite',
-        'float': 'float 3s ease-in-out infinite',
+        shimmer: 'shimmer 2s linear infinite',
       },
       keyframes: {
         shimmer: {
           '0%': { backgroundPosition: '-200% 0' },
           '100%': { backgroundPosition: '200% 0' },
-        },
-        wiggle: {
-          '0%, 100%': { transform: 'rotate(-3deg)' },
-          '50%': { transform: 'rotate(3deg)' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
         },
       },
     },

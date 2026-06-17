@@ -1,19 +1,10 @@
-import { motion } from 'framer-motion'
-
 export default function Card({ children, className = '', hover = false, onClick }) {
-  const Component = hover ? motion.div : 'div'
-  const motionProps = hover ? {
-    whileHover: { y: -4, boxShadow: '0 20px 40px rgba(107,33,168,0.15)' },
-    transition: { duration: 0.2 },
-  } : {}
-
   return (
-    <Component
+    <div
       onClick={onClick}
-      className={`bg-white rounded-2xl shadow-sm border border-purple-50 p-5 ${hover ? 'cursor-pointer' : ''} ${className}`}
-      {...motionProps}
+      className={`bg-white rounded-xl border border-gray-100 shadow-card ${hover ? 'transition-shadow duration-200 hover:shadow-card-hover cursor-pointer' : ''} ${className}`}
     >
       {children}
-    </Component>
+    </div>
   )
 }

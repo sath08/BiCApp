@@ -1,88 +1,89 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { getLeaderboard, getStudents } from '../../lib/localStore'
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { useStudents } from '../../hooks/useStudent'
-import Card from '../../components/ui/Card'
+import Button from '../../components/ui/Button'
 
-const awardLevels = [
-  { name: 'Story Explorer', emoji: '🌱', minPts: 25, color: 'from-green-400 to-emerald-500', bg: 'bg-green-50 border-green-200' },
-  { name: 'Chapter Adventurer', emoji: '⚔️', minPts: 75, color: 'from-blue-400 to-blue-600', bg: 'bg-blue-50 border-blue-200' },
-  { name: 'Book Voyager', emoji: '🚀', minPts: 150, color: 'from-purple-400 to-purple-600', bg: 'bg-purple-50 border-purple-200' },
-  { name: 'Novel Navigator', emoji: '🧭', minPts: 250, color: 'from-yellow-400 to-orange-500', bg: 'bg-yellow-50 border-yellow-200' },
-  { name: 'Future Novelist', emoji: '🏆', minPts: 400, color: 'from-red-400 to-pink-600', bg: 'bg-red-50 border-red-200' },
+const DEFAULT_LEVELS = [
+  { name: 'Bronze Reader', min: 0, max: 99, color: 'bg-amber-700', light: 'bg-amber-50 text-amber-800' },
+  { name: 'Silver Reader', min: 100, max: 249, color: 'bg-gray-400', light: 'bg-gray-100 text-gray-700' },
+  { name: 'Gold Reader', min: 250, max: 499, color: 'bg-amber-400', light: 'bg-amber-50 text-amber-700' },
+  { name: 'Platinum Reader', min: 500, max: 999, color: 'bg-indigo-400', light: 'bg-indigo-50 text-indigo-700' },
+  { name: 'Diamond Champion', min: 1000, max: Infinity, color: 'bg-cyan-500', light: 'bg-cyan-50 text-cyan-700' },
 ]
 
 export default function Awards() {
-  const [selectedLevel, setSelectedLevel] = useState(null)
-  const { data: students = [] } = useStudents()
+  const qc = useQueryClient()
+  const [awarding, setAwarding] = useState(null)
 
-  const eligibleStudents = selectedLevel
-    ? students.filter(s => s.total_points >= selectedLevel.minPts && s.total_points < (awardLevels[awardLevels.indexOf(selectedLevel) + 1]?.minPts ?? Infinity))
-    : []
+  const { data: lb = [] } = useQuery({ queryKey: ['leaderboard'], queryFn: getLeaderboard })
+  const { data: students = [] } = useQuery({ queryKey: ['students'], queryFn: getStudents })
+
+  const award = useMutation({
+    mutationFn: ({ studentId, level }) => Promise.resolve(true),
+    onSuccess: () => { setAwarding(null) }
+  })
+
+  const enriched = lb.map(e => {
+    const s = students.find(st => st.anonymous_id === e.anonymous_id) || {}
+    const level = DEFAULT_LEVELS.slice().reverse().find(l => e.total_points >= l.min) || DEFAULT_LEVELS[0]
+    return { ...e, realName: s.first_name ? `${s.first_name} ${s.last_name}` : e.anonymous_id, studentId: s.id, grade: s.grade, level }
+  }).sort((a, b) => b.total_points - a.total_points)
+
+  const eligible = enriched.filter(e => e.total_points >= 100)
 
   return (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-r from-orange-600 to-orange-400 rounded-2xl p-5 text-white">
-        <h1 className="text-2xl font-extrabold mb-1">🥇 Awards & Recognition</h1>
-        <p className="text-orange-100 text-sm">Configure levels and view eligible students</p>
+    <div className="p-6 max-w-4xl mx-auto space-y-6">
+      <div>
+        <h1 className="text-xl font-bold text-gray-900">Awards</h1>
+        <p className="text-sm text-gray-500 mt-0.5">Recognition levels and award-eligible students</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {awardLevels.map((level, i) => {
-          const eligible = students.filter(s =>
-            s.total_points >= level.minPts &&
-            s.total_points < (awardLevels[i + 1]?.minPts ?? Infinity)
-          )
-          return (
-            <motion.button
-              key={level.name}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.08 }}
-              whileHover={{ y: -3 }}
-              onClick={() => setSelectedLevel(selectedLevel?.name === level.name ? null : level)}
-              className={`text-left p-5 rounded-2xl border-2 transition-all ${level.bg} ${selectedLevel?.name === level.name ? 'ring-2 ring-offset-2 ring-orange-400' : ''}`}
-            >
-              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${level.color} flex items-center justify-center text-3xl mb-3`}>
-                {level.emoji}
-              </div>
-              <h3 className="font-bold text-gray-900">{level.name}</h3>
-              <p className="text-sm text-gray-500 mt-1">≥ {level.minPts} points</p>
-              <div className="mt-3 flex items-center gap-2">
-                <span className="text-2xl font-extrabold text-gray-800">{eligible.length}</span>
-                <span className="text-sm text-gray-500">eligible students</span>
-              </div>
-            </motion.button>
-          )
-        })}
+      <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
+        {DEFAULT_LEVELS.map(l => (
+          <div key={l.name} className="bg-white rounded-xl border border-gray-100 shadow-card p-4 text-center">
+            <div className={`w-8 h-8 rounded-full ${l.color} mx-auto mb-2`} />
+            <p className="text-xs font-semibold text-gray-900">{l.name}</p>
+            <p className="text-xs text-gray-400 mt-0.5">{l.min}–{l.max === Infinity ? '∞' : l.max} pts</p>
+          </div>
+        ))}
       </div>
 
-      {selectedLevel && (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <Card>
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-3xl">{selectedLevel.emoji}</span>
-              <div>
-                <h2 className="font-bold text-purple-900">{selectedLevel.name} Recipients</h2>
-                <p className="text-sm text-gray-500">{eligibleStudents.length} students eligible</p>
+      <div className="bg-white rounded-xl border border-gray-100 shadow-card">
+        <div className="px-5 py-4 border-b border-gray-50">
+          <h2 className="text-sm font-semibold text-gray-900">Award-Eligible Students</h2>
+          <p className="text-xs text-gray-500 mt-0.5">{eligible.length} students with 100+ points</p>
+        </div>
+        <div className="divide-y divide-gray-50">
+          {eligible.map((e, i) => (
+            <div key={e.anonymous_id} className="px-5 py-3.5 flex items-center gap-3">
+              <span className="text-xs text-gray-400 w-5">#{i+1}</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900">{e.realName}</p>
+                {e.grade && <p className="text-xs text-gray-400">Grade {e.grade}</p>}
               </div>
+              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${e.level.light}`}>{e.level.name}</span>
+              <span className="text-sm font-bold text-indigo-600 w-16 text-right">{e.total_points} pts</span>
+              <Button variant="outline" size="sm" onClick={() => setAwarding(e)}>Award</Button>
             </div>
-            {eligibleStudents.length === 0 ? (
-              <p className="text-gray-400 text-center py-6">No students at this level yet.</p>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {eligibleStudents.map(s => (
-                  <div key={s.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                    <div>
-                      <p className="font-semibold text-sm text-gray-800">{s.first_name} {s.last_name}</p>
-                      <p className="text-xs text-gray-400">Grade {s.grade} • {s.school_name}</p>
-                    </div>
-                    <span className="font-bold text-purple-700">{s.total_points} XP</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </Card>
-        </motion.div>
+          ))}
+          {eligible.length === 0 && <p className="text-sm text-gray-400 text-center py-8">No eligible students yet.</p>}
+        </div>
+      </div>
+
+      {awarding && (
+        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-xl w-full max-w-sm p-6">
+            <h3 className="text-base font-semibold text-gray-900 mb-1">Confirm Award</h3>
+            <p className="text-sm text-gray-600 mb-4">Award <strong>{awarding.level.name}</strong> to <strong>{awarding.realName}</strong>?</p>
+            <div className="flex gap-2">
+              <Button variant="outline" fullWidth onClick={() => setAwarding(null)}>Cancel</Button>
+              <Button variant="primary" fullWidth loading={award.isPending}
+                onClick={() => award.mutate({ studentId: awarding.studentId, level: awarding.level.name })}>
+                Confirm
+              </Button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

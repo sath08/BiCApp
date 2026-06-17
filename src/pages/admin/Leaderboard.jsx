@@ -1,90 +1,76 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { useStudents } from '../../hooks/useStudent'
-import { getRecognitionLevel } from '../../lib/localStore'
-import Card from '../../components/ui/Card'
+import { useQuery } from '@tanstack/react-query'
+import { getLeaderboard, getStudents } from '../../lib/localStore'
 
-const medals = ['🥇', '🥈', '🥉']
-const medalColors = ['text-yellow-500 bg-yellow-50', 'text-gray-500 bg-gray-50', 'text-orange-500 bg-orange-50']
+const CATEGORIES = ['overall', 'reading', 'writing']
+const GRADES = ['all', 3, 4, 5, 6, 7, 8]
 
 export default function AdminLeaderboard() {
-  const { data: students = [] } = useStudents()
+  const [category, setCategory] = useState('overall')
+  const [grade, setGrade] = useState('all')
 
-  const fullLeaderboard = [...students]
-    .sort((a, b) => b.total_points - a.total_points)
-    .map((s, i) => ({ ...s, rank: i + 1 }))
+  const { data: lb = [] } = useQuery({ queryKey: ['leaderboard'], queryFn: getLeaderboard })
+  const { data: students = [] } = useQuery({ queryKey: ['students'], queryFn: getStudents })
+
+  const studentById = Object.fromEntries(students.map(s => [s.id, s]))
+
+  const enriched = lb.map(e => {
+    const s = students.find(st => st.anonymous_id === e.anonymous_id) || {}
+    return { ...e, realName: s.first_name ? `${s.first_name} ${s.last_name}` : e.anonymous_id, grade: s.grade, school: s.school_name }
+  })
+
+  const filtered = enriched
+    .filter(e => grade === 'all' || e.grade === grade)
+    .sort((a, b) => {
+      const pts = x => category === 'reading' ? x.reading_points : category === 'writing' ? x.writing_points : x.total_points
+      return pts(b) - pts(a)
+    })
+
+  const pts = e => category === 'reading' ? e.reading_points : category === 'writing' ? e.writing_points : e.total_points
+
+  const medals = ['🥇', '🥈', '🥉']
 
   return (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-r from-orange-600 to-orange-400 rounded-2xl p-5 text-white">
-        <h1 className="text-2xl font-extrabold mb-1">🏆 Full Leaderboard</h1>
-        <p className="text-orange-100 text-sm">Real names visible to coordinators only</p>
+    <div className="p-6 max-w-3xl mx-auto space-y-6">
+      <div>
+        <h1 className="text-xl font-bold text-gray-900">Leaderboard</h1>
+        <p className="text-sm text-gray-500 mt-0.5">Full rankings with student names (admin view)</p>
       </div>
 
-      {fullLeaderboard.length >= 3 && (
-        <div className="grid grid-cols-3 gap-3">
-          {[fullLeaderboard[1], fullLeaderboard[0], fullLeaderboard[2]].map((s, i) => {
-            if (!s) return null
-            const podiumHeights = ['h-24', 'h-32', 'h-20']
-            return (
-              <motion.div
-                key={s.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                className={`rounded-2xl p-3 text-center flex flex-col items-center justify-end ${podiumHeights[i]} ${medalColors[s.rank - 1]}`}
-              >
-                <div className="text-3xl mb-1">{medals[s.rank - 1]}</div>
-                <p className="text-xs font-bold leading-tight">{s.first_name} {s.last_name}</p>
-                <p className="text-sm font-extrabold">{s.total_points} pts</p>
-                <p className="text-xs opacity-70">G{s.grade}</p>
-              </motion.div>
-            )
-          })}
-        </div>
-      )}
+      <div className="flex flex-wrap gap-2">
+        {CATEGORIES.map(c => (
+          <button key={c} onClick={() => setCategory(c)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors capitalize ${category === c ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+            {c}
+          </button>
+        ))}
+        <div className="w-px bg-gray-200 mx-1" />
+        {GRADES.map(g => (
+          <button key={g} onClick={() => setGrade(g)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${grade === g ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+            {g === 'all' ? 'All Grades' : `Gr ${g}`}
+          </button>
+        ))}
+      </div>
 
-      <Card className="p-0 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
-              <tr>
-                {['Rank', 'Student', 'Grade', 'Anonymous ID', 'Points', 'Level'].map(h => (
-                  <th key={h} className="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {fullLeaderboard.map((s, i) => {
-                const { current: level } = getRecognitionLevel(s.total_points)
-                return (
-                  <motion.tr
-                    key={s.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: i * 0.03 }}
-                    className="hover:bg-orange-50 transition-colors"
-                  >
-                    <td className="px-4 py-3">
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-sm ${s.rank <= 3 ? medalColors[s.rank - 1] : 'bg-gray-100 text-gray-500'}`}>
-                        {s.rank <= 3 ? medals[s.rank - 1] : s.rank}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <p className="font-semibold text-sm text-gray-800">{s.first_name} {s.last_name}</p>
-                      <p className="text-xs text-gray-400">{s.school_name}</p>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">G{s.grade}</td>
-                    <td className="px-4 py-3 text-xs text-gray-500 font-mono">{s.anonymous_id}</td>
-                    <td className="px-4 py-3"><span className="font-bold text-purple-700">{s.total_points} XP</span></td>
-                    <td className="px-4 py-3 text-sm">{level.emoji} {level.name}</td>
-                  </motion.tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-      </Card>
+      <div className="space-y-2">
+        {filtered.map((e, i) => (
+          <div key={e.anonymous_id} className={`bg-white rounded-xl border shadow-card p-3.5 flex items-center gap-3 ${i < 3 ? 'border-amber-100' : 'border-gray-100'}`}>
+            <div className="w-8 text-center">
+              {i < 3 ? <span className="text-lg">{medals[i]}</span> : <span className="text-sm font-semibold text-gray-400">#{i+1}</span>}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-gray-900">{e.realName}</p>
+              <p className="text-xs text-gray-400">{e.school || '—'} {e.grade ? `· Grade ${e.grade}` : ''}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm font-bold text-indigo-600">{pts(e).toLocaleString()}</p>
+              <p className="text-xs text-gray-400">pts</p>
+            </div>
+          </div>
+        ))}
+        {filtered.length === 0 && <p className="text-sm text-gray-400 text-center py-8">No data.</p>}
+      </div>
     </div>
   )
 }

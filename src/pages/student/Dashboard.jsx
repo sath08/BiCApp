@@ -1,184 +1,131 @@
-import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts'
 import { useStudentContext } from '../../contexts/StudentContext'
-import { useStudent } from '../../hooks/useStudent'
+import { useStudent, useBadges } from '../../hooks/useStudent'
 import { useEssays } from '../../hooks/useEssays'
 import { usePoints } from '../../hooks/usePoints'
 import { useReadingLogs } from '../../hooks/useReadingLog'
-import StatCard from '../../components/ui/StatCard'
-import StreakFlame from '../../components/ui/StreakFlame'
-import ProgressBar from '../../components/ui/ProgressBar'
-import Card from '../../components/ui/Card'
-import { StatusBadge } from '../../components/ui/Badge'
 import { getRecognitionLevel } from '../../lib/localStore'
+import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from 'recharts'
+import { Link } from 'react-router-dom'
+
+function formatDate(d) {
+  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
 
 export default function StudentDashboard() {
-  const { student } = useStudentContext()
-  const { data: studentData } = useStudent(student?.studentId)
-  const { data: essays = [] } = useEssays(student?.studentId)
-  const { data: pointsData } = usePoints(student?.studentId)
-  const { data: logs = [] } = useReadingLogs(student?.studentId)
+  const { student: ctx } = useStudentContext()
+  const { data: profile } = useStudent(ctx?.studentId)
+  const { data: essays = [] } = useEssays(ctx?.studentId)
+  const { data: points } = usePoints(ctx?.studentId)
+  const { data: logs = [] } = useReadingLogs(ctx?.studentId)
+  const { data: badges = [] } = useBadges(ctx?.studentId)
 
-  const totalPoints = pointsData?.total ?? studentData?.total_points ?? 0
-  const streak = studentData?.reading_streak ?? 0
-  const { current: level, next: nextLevel, progressToNext: levelPct } = getRecognitionLevel(totalPoints)
+  const totalPts = points?.total ?? 0
+  const { current: level, next: nextLevel, progressToNext } = getRecognitionLevel(totalPts)
 
-  const pendingEssays = essays.filter(e => e.status === 'revision_requested')
-  const submittedEssays = essays.filter(e => e.status === 'under_review')
-
-  // Build last 7 days chart data
+  // Last 7 days chart
   const today = new Date()
-  const weeklyStats = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(today)
-    d.setDate(today.getDate() - (6 - i))
-    const dateStr = d.toISOString().slice(0, 10)
-    const dayLogs = logs.filter(l => l.date === dateStr)
-    const minutes = dayLogs.reduce((s, l) => s + l.minutes_read, 0)
-    return { day: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()], minutes }
+  const chartData = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(today); d.setDate(today.getDate() - (6 - i))
+    const key = d.toISOString().slice(0, 10)
+    const dayLogs = logs.filter(l => l.date === key)
+    return { day: ['S','M','T','W','T','F','S'][d.getDay()], minutes: dayLogs.reduce((s, l) => s + l.minutes_read, 0) }
   })
-  const weeklyMins = weeklyStats.reduce((s, d) => s + d.minutes, 0)
+
+  const recentLogs = logs.slice(0, 3)
+  const pendingEssays = essays.filter(e => e.status !== 'approved' && e.status !== 'draft')
 
   return (
-    <div className="space-y-6 pb-20 md:pb-6">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-purple-800 via-purple-700 to-purple-500 rounded-2xl p-6 text-white relative overflow-hidden"
-      >
-        <div className="absolute right-4 top-4 text-6xl opacity-20">📚</div>
-        <p className="text-purple-200 font-medium mb-1">Welcome back,</p>
-        <h1 className="text-2xl font-extrabold mb-4">{student?.firstName} {student?.lastName}! 👋</h1>
-        <div className="grid grid-cols-3 gap-4">
-          <div className="bg-white/20 rounded-xl p-3 text-center">
-            <div className="text-2xl font-extrabold">{totalPoints}</div>
-            <div className="text-xs text-purple-200">Total XP</div>
-          </div>
-          <div className="bg-white/20 rounded-xl p-3 text-center">
-            <div className="text-2xl">{level.emoji}</div>
-            <div className="text-xs text-purple-200 truncate">{level.name}</div>
-          </div>
-          <div className="bg-white/20 rounded-xl p-3 text-center">
-            <div className="text-2xl font-extrabold text-orange-300">{streak}🔥</div>
-            <div className="text-xs text-purple-200">Day Streak</div>
-          </div>
-        </div>
-      </motion.div>
+    <div className="space-y-5 max-w-3xl">
+      {/* Greeting */}
+      <div>
+        <h1 className="text-xl font-bold text-gray-900">Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}, {ctx?.firstName} 👋</h1>
+        <p className="text-sm text-gray-500 mt-0.5">Keep up the great work — you're on a {ctx?.readingStreak || profile?.reading_streak || 5} day streak 🔥</p>
+      </div>
 
-      <Card>
+      {/* Level progress */}
+      <div className="bg-white rounded-xl border border-gray-100 shadow-card p-4">
         <div className="flex items-center justify-between mb-3">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">{level.emoji}</span>
-              <span className="font-bold text-purple-900">{level.name}</span>
+          <div className="flex items-center gap-2.5">
+            <span className="text-2xl">{level.emoji}</span>
+            <div>
+              <p className="font-semibold text-gray-900 text-sm">{level.name}</p>
+              <p className="text-xs text-gray-500">{totalPts} XP total</p>
             </div>
-            <p className="text-xs text-gray-500 mt-0.5">
-              {nextLevel
-                ? `${nextLevel.minPoints - totalPoints} more points to ${nextLevel.name}`
-                : 'Maximum level reached! 🏆'}
-            </p>
           </div>
-          <span className="text-lg font-bold text-purple-700">{totalPoints} XP</span>
-        </div>
-        <ProgressBar value={levelPct} max={100} color="purple" showPercent height="lg" />
-      </Card>
-
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white rounded-2xl shadow-sm border border-purple-50 p-4 flex flex-col items-center col-span-2 sm:col-span-1">
-          <StreakFlame streak={streak} size="md" />
-        </div>
-        <StatCard emoji="⭐" label="Total XP" value={totalPoints} color="purple" index={1} />
-        <StatCard emoji="📖" label="This Week" value={`${weeklyMins}min`} color="teal" index={2} />
-        <StatCard emoji="✍️" label="Essays" value={essays.filter(e => e.status === 'approved').length} sub="approved" color="orange" index={3} />
-      </div>
-
-      {(pendingEssays.length > 0 || submittedEssays.length > 0) && (
-        <div className="space-y-3">
-          {pendingEssays.map(e => (
-            <motion.div key={e.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
-              className="bg-orange-50 border border-orange-200 rounded-xl p-4 flex items-center justify-between"
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">✏️</span>
-                <div>
-                  <p className="font-semibold text-orange-800 text-sm">Revision Requested</p>
-                  <p className="text-xs text-orange-600">"{e.book_title}" — {e.essay_type}</p>
-                </div>
-              </div>
-              <Link to={`/student/writing/${e.id}`} className="text-xs font-bold text-orange-700 bg-orange-100 px-3 py-1.5 rounded-lg hover:bg-orange-200">
-                View →
-              </Link>
-            </motion.div>
-          ))}
-          {submittedEssays.map(e => (
-            <div key={e.id} className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">🔍</span>
-                <div>
-                  <p className="font-semibold text-blue-800 text-sm">Under Review</p>
-                  <p className="text-xs text-blue-600">"{e.book_title}" — {e.essay_type}</p>
-                </div>
-              </div>
-              <StatusBadge status="under_review" />
+          {nextLevel && (
+            <div className="text-right">
+              <p className="text-xs text-gray-400">{nextLevel.name}</p>
+              <p className="text-xs font-medium text-indigo-600">{nextLevel.minPoints - totalPts} XP to go</p>
             </div>
-          ))}
-        </div>
-      )}
-
-      <Card>
-        <h3 className="font-bold text-purple-900 mb-4">📊 This Week's Reading</h3>
-        <ResponsiveContainer width="100%" height={160}>
-          <BarChart data={weeklyStats} barSize={28}>
-            <XAxis dataKey="day" tick={{ fontSize: 12, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
-            <YAxis hide />
-            <Tooltip formatter={(v) => [`${v} min`, 'Minutes']} contentStyle={{ borderRadius: '12px', border: '1px solid #E9D5FF', fontSize: 12 }} />
-            <Bar dataKey="minutes" fill="#6B21A8" radius={[6, 6, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-        <p className="text-xs text-gray-400 text-center mt-2">
-          Grade {student?.grade}: {student?.grade <= 5 ? '30' : '45'} min/day minimum for points
-        </p>
-      </Card>
-
-      <div className="grid grid-cols-2 gap-4">
-        <Link to="/student/reading-log">
-          <motion.div whileHover={{ y: -3 }} className="bg-gradient-to-br from-purple-600 to-purple-400 rounded-2xl p-5 text-white text-center shadow-lg shadow-purple-200">
-            <div className="text-4xl mb-2">📖</div>
-            <div className="font-bold">Log Reading</div>
-            <div className="text-xs text-purple-200 mt-1">Track today's session</div>
-          </motion.div>
-        </Link>
-        <Link to="/student/writing">
-          <motion.div whileHover={{ y: -3 }} className="bg-gradient-to-br from-orange-500 to-orange-400 rounded-2xl p-5 text-white text-center shadow-lg shadow-orange-200">
-            <div className="text-4xl mb-2">✍️</div>
-            <div className="font-bold">Write Essay</div>
-            <div className="text-xs text-orange-100 mt-1">Submit your work</div>
-          </motion.div>
-        </Link>
-      </div>
-
-      <Card>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-bold text-purple-900">📝 Recent Essays</h3>
-          <Link to="/student/writing" className="text-xs text-purple-600 font-semibold hover:text-purple-800">View all →</Link>
-        </div>
-        <div className="space-y-3">
-          {essays.slice(0, 3).map(e => (
-            <Link key={e.id} to={`/student/writing/${e.id}`}>
-              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-purple-50 transition-colors">
-                <div>
-                  <p className="font-semibold text-sm text-gray-800">{e.book_title}</p>
-                  <p className="text-xs text-gray-500">{e.essay_type}</p>
-                </div>
-                <StatusBadge status={e.status} />
-              </div>
-            </Link>
-          ))}
-          {essays.length === 0 && (
-            <p className="text-sm text-gray-400 text-center py-4">No essays yet. Start writing! ✍️</p>
           )}
         </div>
-      </Card>
+        {nextLevel && (
+          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-full bg-indigo-500 rounded-full transition-all duration-700" style={{ width: `${progressToNext}%` }} />
+          </div>
+        )}
+      </div>
+
+      {/* Stats row */}
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { label: 'Total XP', value: totalPts, sub: 'points earned' },
+          { label: 'Streak', value: `${ctx?.readingStreak || profile?.reading_streak || 5}d`, sub: 'days reading' },
+          { label: 'Badges', value: badges.filter(b => b.earned).length, sub: 'unlocked' },
+        ].map(s => (
+          <div key={s.label} className="bg-white rounded-xl border border-gray-100 shadow-card p-3.5 text-center">
+            <p className="text-xl font-bold text-gray-900">{s.value}</p>
+            <p className="text-xs text-gray-500 mt-0.5">{s.sub}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Activity chart */}
+      <div className="bg-white rounded-xl border border-gray-100 shadow-card p-4">
+        <p className="text-sm font-semibold text-gray-900 mb-3">Reading this week</p>
+        <ResponsiveContainer width="100%" height={100}>
+          <BarChart data={chartData} barSize={20}>
+            <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#9CA3AF' }} />
+            <Tooltip contentStyle={{ borderRadius: 8, border: '1px solid #F3F4F6', fontSize: 12 }} cursor={{ fill: '#F3F4F6' }} />
+            <Bar dataKey="minutes" fill="#4F46E5" radius={[3, 3, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Quick actions */}
+      <div className="grid grid-cols-2 gap-3">
+        <Link to="/student/reading-log" className="bg-indigo-600 text-white rounded-xl p-4 hover:bg-indigo-700 transition-colors group">
+          <p className="text-lg mb-1">📖</p>
+          <p className="font-semibold text-sm">Log reading</p>
+          <p className="text-xs text-indigo-200 mt-0.5">Add today's session</p>
+        </Link>
+        <Link to="/student/writing" className="bg-white border border-gray-100 shadow-card text-gray-900 rounded-xl p-4 hover:bg-gray-50 transition-colors">
+          <p className="text-lg mb-1">✍️</p>
+          <p className="font-semibold text-sm">Write an essay</p>
+          <p className="text-xs text-gray-400 mt-0.5">{pendingEssays.length} pending review</p>
+        </Link>
+      </div>
+
+      {/* Recent logs */}
+      {recentLogs.length > 0 && (
+        <div className="bg-white rounded-xl border border-gray-100 shadow-card">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
+            <p className="text-sm font-semibold text-gray-900">Recent reading</p>
+            <Link to="/student/reading-log" className="text-xs text-indigo-600 hover:underline">View all</Link>
+          </div>
+          <div className="divide-y divide-gray-50">
+            {recentLogs.map(log => (
+              <div key={log.id} className="flex items-center justify-between px-4 py-3">
+                <div>
+                  <p className="text-sm font-medium text-gray-900">{log.book_title}</p>
+                  <p className="text-xs text-gray-400">{log.author} · {formatDate(log.date)}</p>
+                </div>
+                <span className="text-xs font-medium text-gray-500">{log.minutes_read}m</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

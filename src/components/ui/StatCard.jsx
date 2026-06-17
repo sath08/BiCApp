@@ -1,43 +1,25 @@
-import { motion } from 'framer-motion'
+const colorMap = {
+  purple: { icon: 'bg-indigo-50 text-indigo-600', value: 'text-indigo-600' },
+  orange: { icon: 'bg-orange-50 text-orange-500', value: 'text-orange-500' },
+  teal:   { icon: 'bg-emerald-50 text-emerald-600', value: 'text-emerald-600' },
+  yellow: { icon: 'bg-amber-50 text-amber-600', value: 'text-amber-600' },
+  green:  { icon: 'bg-green-50 text-green-600', value: 'text-green-600' },
+  blue:   { icon: 'bg-blue-50 text-blue-600', value: 'text-blue-600' },
+  red:    { icon: 'bg-red-50 text-red-500', value: 'text-red-500' },
+}
 
 export default function StatCard({ emoji, label, value, sub, color = 'purple', index = 0 }) {
-  const colors = {
-    purple: 'from-purple-600 to-purple-400',
-    orange: 'from-orange-500 to-orange-400',
-    teal: 'from-teal-600 to-teal-400',
-    yellow: 'from-yellow-500 to-yellow-400',
-    green: 'from-green-600 to-green-400',
-    blue: 'from-blue-600 to-blue-400',
-    red: 'from-red-500 to-red-400',
-  }
-  const bgs = {
-    purple: 'bg-purple-50',
-    orange: 'bg-orange-50',
-    teal: 'bg-teal-50',
-    yellow: 'bg-yellow-50',
-    green: 'bg-green-50',
-    blue: 'bg-blue-50',
-    red: 'bg-red-50',
-  }
-
+  const c = colorMap[color] || colorMap.purple
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
-      whileHover={{ y: -4 }}
-      className="bg-white rounded-2xl shadow-sm border border-purple-50 p-5 flex items-center gap-4"
-    >
-      <div className={`${bgs[color]} rounded-xl p-3 text-2xl`}>
+    <div className="bg-white rounded-xl border border-gray-100 shadow-card p-4 flex items-center gap-3">
+      <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg shrink-0 ${c.icon}`}>
         {emoji}
       </div>
-      <div className="flex-1">
-        <p className="text-sm text-gray-500 font-medium">{label}</p>
-        <p className={`text-2xl font-extrabold bg-gradient-to-r ${colors[color]} bg-clip-text text-transparent`}>
-          {value}
-        </p>
+      <div className="min-w-0">
+        <p className="text-xs text-gray-500 font-medium truncate">{label}</p>
+        <p className={`text-xl font-bold leading-tight ${c.value}`}>{value}</p>
         {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
       </div>
-    </motion.div>
+    </div>
   )
 }

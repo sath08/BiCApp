@@ -1,77 +1,110 @@
-import { motion } from 'framer-motion'
-import { useStudents } from '../../hooks/useStudent'
-import { useWritingAssignments } from '../../hooks/useStudent'
-import { exportCSV } from '../../lib/localStore'
-import Card from '../../components/ui/Card'
+import { useQuery } from '@tanstack/react-query'
+import { getStudents, getReadingLogs, getAllEssays } from '../../lib/localStore'
 
-const colorMap = {
-  purple: 'from-purple-600 to-purple-400',
-  teal: 'from-teal-600 to-teal-400',
-  orange: 'from-orange-500 to-orange-400',
-  yellow: 'from-yellow-500 to-yellow-400',
+function getAllPoints() {
+  try { return JSON.parse(localStorage.getItem('bic_points') || '[]') } catch { return [] }
 }
 
-export default function Reports() {
-  const { data: students = [] } = useStudents()
+function StatRow({ label, value }) {
+  return (
+    <div className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">
+      <span className="text-sm text-gray-600">{label}</span>
+      <span className="text-sm font-semibold text-gray-900">{value}</span>
+    </div>
+  )
+}
 
-  const reports = [
-    { title: 'Students Report', emoji: '👨‍🎓', description: `${students.length} students`, color: 'purple', type: 'students' },
-    { title: 'Reading Logs Report', emoji: '📖', description: 'All reading sessions', color: 'teal', type: 'reading_logs' },
-    { title: 'Essays Report', emoji: '✍️', description: 'All essay submissions', color: 'orange', type: 'essays' },
-    { title: 'Points Ledger Report', emoji: '⭐', description: 'All point transactions', color: 'yellow', type: 'points' },
-  ]
+export default function AdminReports() {
+  const { data: students = [] } = useQuery({ queryKey: ['students'], queryFn: getStudents })
+  const { data: logs = [] } = useQuery({ queryKey: ['reading-logs'], queryFn: getReadingLogs })
+  const { data: submissions = [] } = useQuery({ queryKey: ['writing-submissions'], queryFn: getAllEssays })
+  const { data: points = [] } = useQuery({ queryKey: ['points'], queryFn: getAllPoints })
+
+  const totalPoints = points.reduce((s, p) => s + p.points, 0)
+  const totalPages = logs.reduce((s, l) => s + (l.pages_read || 0), 0)
+  const approved = submissions.filter(s => s.status === 'approved').length
+  const pending = submissions.filter(s => s.status === 'pending').length
+
+  const byGrade = students.reduce((acc, s) => {
+    acc[s.grade] = (acc[s.grade] || 0) + 1
+    return acc
+  }, {})
+
+  function exportCSV() {
+    const rows = [['Student ID','First Name','Last Name','Grade','School','Total Points']]
+    const ptsByStudent = points.reduce((a, p) => { a[p.student_id] = (a[p.student_id] || 0) + p.points; return a }, {})
+    students.forEach(s => rows.push([s.id, s.first_name, s.last_name, s.grade, s.school_name, ptsByStudent[s.id] || 0]))
+    const csv = rows.map(r => r.join(',')).join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a'); a.href = url; a.download = 'bic-report.csv'; a.click()
+    URL.revokeObjectURL(url)
+  }
 
   return (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-r from-orange-600 to-orange-400 rounded-2xl p-5 text-white">
-        <h1 className="text-2xl font-extrabold mb-1">📈 Reports & Exports</h1>
-        <p className="text-orange-100 text-sm">Download CSV reports for any dataset</p>
+    <div className="p-6 max-w-4xl mx-auto space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-bold text-gray-900">Reports</h1>
+          <p className="text-sm text-gray-500 mt-0.5">Program summary and data exports</p>
+        </div>
+        <button onClick={exportCSV}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-card">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+          Export CSV
+        </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        {reports.map((r, i) => (
-          <motion.div
-            key={r.title}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-          >
-            <Card className="flex items-center gap-5">
-              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${colorMap[r.color]} flex items-center justify-center text-2xl flex-shrink-0`}>
-                {r.emoji}
-              </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-gray-900">{r.title}</h3>
-                <p className="text-sm text-gray-500">{r.description}</p>
-              </div>
-              <button
-                onClick={() => exportCSV(r.type)}
-                className="flex-shrink-0 bg-gray-100 hover:bg-purple-100 hover:text-purple-700 text-gray-700 font-semibold text-sm px-4 py-2 rounded-xl transition-colors flex items-center gap-1"
-              >
-                ⬇️ Export
-              </button>
-            </Card>
-          </motion.div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {[
+          { label: 'Students', value: students.length, color: 'bg-indigo-50 text-indigo-600' },
+          { label: 'Total Points', value: totalPoints.toLocaleString(), color: 'bg-amber-50 text-amber-600' },
+          { label: 'Pages Read', value: totalPages.toLocaleString(), color: 'bg-emerald-50 text-emerald-600' },
+          { label: 'Submissions', value: submissions.length, color: 'bg-rose-50 text-rose-600' },
+        ].map(s => (
+          <div key={s.label} className="bg-white rounded-xl border border-gray-100 shadow-card p-4">
+            <div className={`w-9 h-9 rounded-lg ${s.color} flex items-center justify-center mb-3`}>
+              <span className="text-lg font-bold">{s.value.toString()[0]}</span>
+            </div>
+            <p className="text-xl font-bold text-gray-900">{s.value}</p>
+            <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
+          </div>
         ))}
       </div>
 
-      <Card>
-        <h2 className="font-bold text-purple-900 mb-4">📊 Program Summary</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {[
-            { label: 'Total Students', value: students.length, emoji: '👨‍🎓' },
-            { label: 'Active Students', value: students.filter(s => s.is_active).length, emoji: '✅' },
-            { label: 'Award Eligible', value: students.filter(s => s.total_points >= 25).length, emoji: '🏆' },
-            { label: 'Schools', value: new Set(students.map(s => s.school_name)).size, emoji: '🏫' },
-          ].map(stat => (
-            <div key={stat.label} className="text-center p-4 bg-gray-50 rounded-xl">
-              <div className="text-2xl mb-1">{stat.emoji}</div>
-              <div className="text-2xl font-extrabold text-purple-800">{stat.value}</div>
-              <div className="text-xs text-gray-500 mt-1">{stat.label}</div>
-            </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="bg-white rounded-xl border border-gray-100 shadow-card p-5">
+          <h2 className="text-sm font-semibold text-gray-900 mb-3">Writing Submissions</h2>
+          <StatRow label="Pending Review" value={pending} />
+          <StatRow label="Approved" value={approved} />
+          <StatRow label="Total Submitted" value={submissions.length} />
+        </div>
+
+        <div className="bg-white rounded-xl border border-gray-100 shadow-card p-5">
+          <h2 className="text-sm font-semibold text-gray-900 mb-3">Students by Grade</h2>
+          {Object.entries(byGrade).sort(([a],[b]) => a-b).map(([g, n]) => (
+            <StatRow key={g} label={`Grade ${g}`} value={n} />
           ))}
         </div>
-      </Card>
+      </div>
+
+      <div className="bg-white rounded-xl border border-gray-100 shadow-card p-5">
+        <h2 className="text-sm font-semibold text-gray-900 mb-1">Data Exports</h2>
+        <p className="text-xs text-gray-500 mb-4">Download program data as CSV files for external analysis.</p>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[
+            { label: 'Student Roster', desc: 'All students with grades and schools', fn: exportCSV },
+            { label: 'Points Summary', desc: 'Per-student point totals', fn: exportCSV },
+            { label: 'Reading Log', desc: 'All reading log entries', fn: exportCSV },
+          ].map(e => (
+            <button key={e.label} onClick={e.fn}
+              className="text-left p-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+              <p className="text-sm font-medium text-gray-900">{e.label}</p>
+              <p className="text-xs text-gray-500 mt-0.5">{e.desc}</p>
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

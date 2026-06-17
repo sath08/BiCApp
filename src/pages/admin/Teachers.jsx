@@ -1,85 +1,88 @@
 import { useState } from 'react'
-import { useTeachers, useAddTeacher, useDeactivateTeacher } from '../../hooks/useStudent'
-import Card from '../../components/ui/Card'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { getTeachers, addTeacherAccount } from '../../lib/localStore'
+import { useForm } from 'react-hook-form'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
-import { useForm } from 'react-hook-form'
 
 export default function AdminTeachers() {
-  const [showAdd, setShowAdd] = useState(false)
-  const { data: teachers = [] } = useTeachers()
-  const addTeacher = useAddTeacher()
-  const deactivate = useDeactivateTeacher()
-  const { register, handleSubmit, reset } = useForm()
+  const qc = useQueryClient()
+  const [open, setOpen] = useState(false)
+  const { register, handleSubmit, reset, formState: { errors } } = useForm()
+  const { data: teachers = [] } = useQuery({ queryKey: ['teachers'], queryFn: getTeachers })
 
-  function handleAdd(data) {
-    addTeacher.mutate(data)
-    setShowAdd(false)
-    reset()
-  }
+  const add = useMutation({
+    mutationFn: addTeacherAccount,
+    onSuccess: () => { qc.invalidateQueries(['teachers']); reset(); setOpen(false) }
+  })
+
+  const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'
+  const labelCls = 'block text-xs font-medium text-gray-600 mb-1'
 
   return (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-r from-orange-600 to-orange-400 rounded-2xl p-5 text-white flex items-center justify-between">
+    <div className="p-6 max-w-4xl mx-auto space-y-6">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold mb-1">👩‍🏫 Teacher Management</h1>
-          <p className="text-orange-100 text-sm">{teachers.length} teachers</p>
+          <h1 className="text-xl font-bold text-gray-900">Teachers</h1>
+          <p className="text-sm text-gray-500 mt-0.5">{teachers.length} staff members</p>
         </div>
-        <Button variant="yellow" onClick={() => setShowAdd(true)}>+ Add Teacher</Button>
+        <Button variant="primary" size="sm" onClick={() => setOpen(true)}>Add Teacher</Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div className="grid gap-3">
         {teachers.map(t => (
-          <Card key={t.id} className="space-y-4">
-            <div className="flex items-start justify-between">
-              <div className="w-14 h-14 bg-gradient-to-br from-teal-600 to-teal-400 rounded-2xl flex items-center justify-center text-white text-2xl font-bold">
-                {t.full_name.split(' ').map(n => n[0]).join('')}
-              </div>
-              <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${t.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                {t.is_active ? 'Active' : 'Inactive'}
-              </span>
+          <div key={t.id} className="bg-white rounded-xl border border-gray-100 shadow-card p-4 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-semibold text-sm flex-shrink-0">
+              {t.first_name?.[0]}{t.last_name?.[0]}
             </div>
-            <div>
-              <p className="font-bold text-gray-900">{t.full_name}</p>
-              <p className="text-sm text-gray-500">{t.email}</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-gray-900">{t.first_name} {t.last_name}</p>
+              <p className="text-xs text-gray-500">{t.email}</p>
             </div>
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-gray-100">
-              <div className="text-center">
-                <p className="font-extrabold text-purple-700 text-xl">{t.student_count ?? 0}</p>
-                <p className="text-xs text-gray-400">Students</p>
-              </div>
-              <div className="text-center">
-                <p className={`font-extrabold text-xl ${(t.pending_reviews ?? 0) > 3 ? 'text-red-500' : 'text-green-500'}`}>{t.pending_reviews ?? 0}</p>
-                <p className="text-xs text-gray-400">Pending</p>
-              </div>
+            <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${t.role === 'coordinator' ? 'bg-indigo-50 text-indigo-700' : 'bg-emerald-50 text-emerald-700'}`}>
+              {t.role === 'coordinator' ? 'Admin' : 'Teacher'}
+            </span>
+            <div className="text-right">
+              <p className="text-xs text-gray-500">Grades</p>
+              <p className="text-sm font-medium text-gray-900">{t.assigned_grades?.join(', ') || '—'}</p>
             </div>
-            <div className="flex gap-2">
-              {t.is_active && (
-                <button
-                  onClick={() => deactivate.mutate(t.id)}
-                  className="flex-1 text-xs border border-gray-200 rounded-xl py-2 font-semibold text-gray-600 hover:border-red-300 hover:text-red-500 transition-colors"
-                >Deactivate</button>
-              )}
-            </div>
-          </Card>
+          </div>
         ))}
       </div>
 
-      <Modal open={showAdd} onClose={() => setShowAdd(false)} title="Add New Teacher">
-        <form onSubmit={handleSubmit(handleAdd)} className="space-y-4">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
-            <input {...register('full_name', { required: true })} className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none" placeholder="e.g. Ms. Johnson" />
+      <Modal open={open} onClose={() => setOpen(false)} title="Add Teacher">
+        <form onSubmit={handleSubmit(d => add.mutate(d))} className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className={labelCls}>First Name</label>
+              <input {...register('first_name', { required: true })} className={inputCls} />
+              {errors.first_name && <p className="text-xs text-red-500 mt-1">Required</p>}
+            </div>
+            <div>
+              <label className={labelCls}>Last Name</label>
+              <input {...register('last_name', { required: true })} className={inputCls} />
+              {errors.last_name && <p className="text-xs text-red-500 mt-1">Required</p>}
+            </div>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
-            <input type="email" {...register('email', { required: true })} className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none" placeholder="teacher@bic.edu" />
+            <label className={labelCls}>Email</label>
+            <input type="email" {...register('email', { required: true })} className={inputCls} />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Password</label>
-            <input type="password" {...register('password', { required: true })} className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none" placeholder="Set initial password" />
+            <label className={labelCls}>Role</label>
+            <select {...register('role')} className={inputCls}>
+              <option value="teacher">Teacher</option>
+              <option value="coordinator">Admin / Coordinator</option>
+            </select>
           </div>
-          <Button type="submit" variant="primary" fullWidth loading={addTeacher.isPending}>Add Teacher</Button>
+          <div>
+            <label className={labelCls}>Password</label>
+            <input type="password" {...register('password', { required: true })} className={inputCls} defaultValue="password" />
+          </div>
+          <div className="flex gap-2 pt-2">
+            <Button type="button" variant="outline" fullWidth onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type="submit" variant="primary" fullWidth loading={add.isPending}>Add</Button>
+          </div>
         </form>
       </Modal>
     </div>

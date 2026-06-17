@@ -1,7 +1,4 @@
-import { motion } from 'framer-motion'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
-import StatCard from '../../components/ui/StatCard'
-import Card from '../../components/ui/Card'
 import { useStudents, useTeachers, useProgramStats } from '../../hooks/useStudent'
 import { getRecognitionLevel } from '../../lib/localStore'
 
@@ -22,73 +19,83 @@ export default function AdminDashboard() {
   const awardEligible = students.filter(s => s.total_points >= 25)
 
   return (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-r from-orange-600 to-orange-400 rounded-2xl p-6 text-white">
-        <h1 className="text-2xl font-extrabold mb-1">📊 Program Overview</h1>
-        <p className="text-orange-100 text-sm">Bellevue Reading & Writing Champions — Summer 2026</p>
+    <div className="max-w-5xl space-y-5">
+      <div>
+        <h1 className="text-xl font-bold text-gray-900">Program Overview</h1>
+        <p className="text-sm text-gray-500 mt-0.5">Bellevue Reading & Writing Champions — Summer 2026</p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <StatCard emoji="👨‍🎓" label="Total Students" value={stats?.total_students ?? students.length} color="purple" index={0} />
-        <StatCard emoji="👩‍🏫" label="Teachers" value={stats?.teacher_count ?? teachers.length} color="teal" index={1} />
-        <StatCard emoji="📝" label="Pending Reviews" value={stats?.pending_reviews ?? 0} color="orange" index={2} />
-        <StatCard emoji="🏆" label="Award Eligible" value={awardEligible.length} color="yellow" index={3} />
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { label: 'Students', value: stats?.total_students ?? students.length },
+          { label: 'Teachers', value: stats?.teacher_count ?? teachers.length },
+          { label: 'Pending Reviews', value: stats?.pending_reviews ?? 0, alert: true },
+          { label: 'Award Eligible', value: awardEligible.length },
+        ].map(s => (
+          <div key={s.label} className="bg-white rounded-xl border border-gray-100 shadow-card p-4 text-center">
+            <p className={`text-2xl font-bold ${s.alert && s.value > 3 ? 'text-orange-500' : 'text-gray-900'}`}>{s.value}</p>
+            <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
+          </div>
+        ))}
       </div>
 
-      <Card>
-        <h3 className="font-bold text-purple-900 mb-4">📈 Program Growth</h3>
-        <ResponsiveContainer width="100%" height={200}>
+      {/* Growth chart */}
+      <div className="bg-white rounded-xl border border-gray-100 shadow-card p-5">
+        <p className="text-sm font-semibold text-gray-900 mb-4">Program Growth</p>
+        <ResponsiveContainer width="100%" height={180}>
           <LineChart data={monthlyData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#F3E8FF" />
-            <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
-            <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #E9D5FF', fontSize: 12 }} />
-            <Line type="monotone" dataKey="students" stroke="#6B21A8" strokeWidth={2} dot={{ fill: '#6B21A8', r: 4 }} name="Students" />
-            <Line type="monotone" dataKey="essays" stroke="#F97316" strokeWidth={2} dot={{ fill: '#F97316', r: 4 }} name="Essays" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
+            <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
+            <Tooltip contentStyle={{ borderRadius: 8, border: '1px solid #F3F4F6', fontSize: 12 }} />
+            <Line type="monotone" dataKey="students" stroke="#4F46E5" strokeWidth={2} dot={false} name="Students" />
+            <Line type="monotone" dataKey="essays" stroke="#F97316" strokeWidth={2} dot={false} name="Essays" />
           </LineChart>
         </ResponsiveContainer>
-        <div className="flex justify-center gap-6 mt-2">
-          <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-purple-700" /><span className="text-xs text-gray-500">Students</span></div>
-          <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-orange-500" /><span className="text-xs text-gray-500">Essays</span></div>
+        <div className="flex gap-4 mt-2">
+          <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-indigo-600" /><span className="text-xs text-gray-500">Students</span></div>
+          <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-orange-500" /><span className="text-xs text-gray-500">Essays</span></div>
         </div>
-      </Card>
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <Card>
-          <h3 className="font-bold text-purple-900 mb-4">👩‍🏫 Teacher Performance</h3>
-          <div className="space-y-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        {/* Teachers */}
+        <div className="bg-white rounded-xl border border-gray-100 shadow-card">
+          <p className="text-sm font-semibold text-gray-900 px-4 py-3 border-b border-gray-50">Teachers</p>
+          <div className="divide-y divide-gray-50">
             {teachers.filter(t => t.is_active).map(t => (
-              <div key={t.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+              <div key={t.id} className="flex items-center justify-between px-4 py-3">
                 <div>
-                  <p className="font-semibold text-sm text-gray-800">{t.full_name}</p>
+                  <p className="text-sm font-medium text-gray-900">{t.full_name}</p>
                   <p className="text-xs text-gray-400">{t.student_count} students</p>
                 </div>
-                <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${(t.pending_reviews || 0) > 3 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                <span className={`text-xs font-medium px-2 py-0.5 rounded-md ${(t.pending_reviews || 0) > 3 ? 'bg-orange-50 text-orange-600' : 'bg-green-50 text-green-600'}`}>
                   {t.pending_reviews || 0} pending
                 </span>
               </div>
             ))}
           </div>
-        </Card>
+        </div>
 
-        <Card>
-          <h3 className="font-bold text-purple-900 mb-4">🏆 Award Eligible Students</h3>
-          <div className="space-y-2">
+        {/* Award eligible */}
+        <div className="bg-white rounded-xl border border-gray-100 shadow-card">
+          <p className="text-sm font-semibold text-gray-900 px-4 py-3 border-b border-gray-50">Award Eligible</p>
+          <div className="divide-y divide-gray-50">
             {awardEligible.slice(0, 5).map(s => {
               const { current: level } = getRecognitionLevel(s.total_points)
               return (
-                <div key={s.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                <div key={s.id} className="flex items-center justify-between px-4 py-3">
                   <div>
-                    <p className="font-semibold text-sm text-gray-800">{s.first_name} {s.last_name}</p>
+                    <p className="text-sm font-medium text-gray-900">{s.first_name} {s.last_name}</p>
                     <p className="text-xs text-gray-400">Grade {s.grade}</p>
                   </div>
-                  <span className="text-sm">{level.emoji} {s.total_points} pts</span>
+                  <span className="text-sm font-semibold text-indigo-600">{level.emoji} {s.total_points}</span>
                 </div>
               )
             })}
-            {awardEligible.length === 0 && <p className="text-sm text-gray-400 text-center py-4">No eligible students yet.</p>}
+            {awardEligible.length === 0 && <p className="text-sm text-gray-400 text-center py-8">No eligible students yet</p>}
           </div>
-        </Card>
+        </div>
       </div>
     </div>
   )

@@ -4,58 +4,30 @@
 
 @layer base {
   body {
-    @apply bg-bg-lavender font-sans text-gray-800;
+    background-color: #F8F9FB;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #111827;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
 @layer utilities {
   .shimmer {
-    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%);
     background-size: 200% 100%;
     animation: shimmer 2s linear infinite;
   }
-
-  .gradient-purple {
-    @apply bg-gradient-to-r from-purple-700 to-purple-500;
-  }
-
-  .gradient-orange {
-    @apply bg-gradient-to-r from-orange-500 to-orange-400;
-  }
-
-  .gradient-teal {
-    @apply bg-gradient-to-r from-teal-600 to-teal-400;
-  }
-
-  .card-shadow {
-    box-shadow: 0 4px 20px rgba(107, 33, 168, 0.08);
-  }
-
-  .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
-  }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  @apply bg-purple-50;
-}
-::-webkit-scrollbar-thumb {
-  @apply bg-purple-300 rounded-full;
-}
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-purple-500;
-}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #D1D5DB; }
 
-/* Confetti animation */
 @keyframes confetti-fall {
-  0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  0%   { transform: translateY(-100vh) rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(100vh)  rotate(720deg); opacity: 0; }
 }
-
 .confetti-piece {
   position: fixed;
   width: 10px;

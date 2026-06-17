@@ -4,12 +4,12 @@ import NotificationBell from '../ui/NotificationBell'
 import { useState } from 'react'
 
 const navItems = [
-  { to: '/student/dashboard', emoji: '🏠', label: 'Home' },
-  { to: '/student/reading-log', emoji: '📖', label: 'Reading' },
-  { to: '/student/writing', emoji: '✍️', label: 'Writing' },
-  { to: '/student/leaderboard', emoji: '🏆', label: 'Rankings' },
-  { to: '/student/badges', emoji: '🏅', label: 'Badges' },
-  { to: '/student/profile', emoji: '👤', label: 'Profile' },
+  { to: '/student/dashboard', icon: '⊞', label: 'Dashboard' },
+  { to: '/student/reading-log', icon: '◉', label: 'Reading Log' },
+  { to: '/student/writing', icon: '◎', label: 'Writing' },
+  { to: '/student/leaderboard', icon: '△', label: 'Leaderboard' },
+  { to: '/student/badges', icon: '◈', label: 'Badges' },
+  { to: '/student/profile', icon: '○', label: 'Profile' },
 ]
 
 export default function StudentLayout() {
@@ -17,119 +17,88 @@ export default function StudentLayout() {
   const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  function handleLogout() {
-    logoutStudent()
-    navigate('/')
-  }
+  function handleLogout() { logoutStudent(); navigate('/') }
 
   return (
-    <div className="min-h-screen bg-bg-lavender flex flex-col">
-      {/* Top Bar */}
-      <header className="bg-white border-b border-purple-100 sticky top-0 z-30 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <button className="md:hidden p-2 rounded-lg hover:bg-purple-50" onClick={() => setMobileOpen(!mobileOpen)}>
-              <span className="text-xl">☰</span>
-            </button>
-            <span className="text-xl">📚</span>
-            <span className="font-extrabold text-purple-800 hidden sm:block">BIC Champions</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="hidden sm:block text-sm font-semibold text-purple-700 bg-purple-50 px-3 py-1.5 rounded-xl">
-              👋 {student?.firstName}
-            </span>
-            <NotificationBell />
-            <button
-              onClick={handleLogout}
-              className="text-sm text-gray-500 hover:text-red-500 px-3 py-1.5 rounded-xl hover:bg-red-50 transition-colors font-medium"
-            >
-              Logout
-            </button>
-          </div>
+    <div className="min-h-screen bg-[#F8F9FB] flex flex-col">
+      {/* Header */}
+      <header className="h-14 bg-white border-b border-gray-100 sticky top-0 z-30 flex items-center px-4">
+        <div className="flex items-center gap-3 flex-1">
+          <button className="md:hidden p-1.5 rounded-lg hover:bg-gray-100 text-gray-500" onClick={() => setMobileOpen(true)}>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+          </button>
+          <span className="font-semibold text-gray-900 text-sm">BIC Champions</span>
+          <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-600 text-xs font-medium">Student</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <span className="hidden sm:block text-sm text-gray-500 mr-2">{student?.firstName} {student?.lastName}</span>
+          <NotificationBell />
+          <button onClick={handleLogout} className="ml-1 px-3 py-1.5 text-xs text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors font-medium">
+            Log out
+          </button>
         </div>
       </header>
 
-      <div className="flex flex-1">
-        {/* Sidebar - Desktop */}
-        <aside className="hidden md:flex flex-col w-56 bg-white border-r border-purple-100 min-h-[calc(100vh-64px)] sticky top-16 h-[calc(100vh-64px)]">
-          <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+      <div className="flex flex-1 min-h-0">
+        {/* Sidebar */}
+        <aside className="hidden md:flex flex-col w-52 bg-white border-r border-gray-100 sticky top-14 h-[calc(100vh-3.5rem)]">
+          <nav className="flex-1 py-4 px-3 space-y-0.5 overflow-y-auto">
             {navItems.map(item => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all ${
-                    isActive
-                      ? 'bg-gradient-to-r from-purple-700 to-purple-500 text-white shadow-md shadow-purple-200'
-                      : 'text-gray-600 hover:bg-purple-50 hover:text-purple-700'
-                  }`
-                }
+              <NavLink key={item.to} to={item.to}
+                className={({ isActive }) => `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
               >
-                <span className="text-lg">{item.emoji}</span>
+                <span className="text-[11px] w-4 text-center opacity-60">{item.icon}</span>
                 {item.label}
               </NavLink>
             ))}
           </nav>
-          <div className="p-3 border-t border-purple-50">
-            <div className="bg-purple-50 rounded-xl p-3 text-center">
-              <div className="text-2xl mb-1">🔥</div>
-              <div className="text-xl font-extrabold text-orange-500">{student?.readingStreak || 5}</div>
-              <div className="text-xs text-gray-500">day streak</div>
+          <div className="p-3 border-t border-gray-100">
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-orange-50">
+              <span className="text-base">🔥</span>
+              <div>
+                <p className="text-sm font-bold text-orange-600">{student?.readingStreak || 5} days</p>
+                <p className="text-xs text-gray-500">reading streak</p>
+              </div>
             </div>
           </div>
         </aside>
 
-        {/* Mobile Nav Overlay */}
+        {/* Mobile overlay */}
         {mobileOpen && (
           <div className="fixed inset-0 z-40 md:hidden">
-            <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
-            <div className="absolute left-0 top-0 bottom-0 w-64 bg-white shadow-xl p-4">
-              <div className="flex items-center gap-2 mb-6">
-                <span className="text-2xl">📚</span>
-                <span className="font-extrabold text-purple-800">BIC Champions</span>
+            <div className="absolute inset-0 bg-black/20" onClick={() => setMobileOpen(false)} />
+            <div className="absolute left-0 top-0 bottom-0 w-60 bg-white shadow-xl flex flex-col">
+              <div className="h-14 flex items-center px-4 border-b border-gray-100">
+                <span className="font-semibold text-gray-900">BIC Champions</span>
               </div>
-              {navItems.map(item => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm mb-1 transition-all ${
-                      isActive
-                        ? 'bg-gradient-to-r from-purple-700 to-purple-500 text-white'
-                        : 'text-gray-600 hover:bg-purple-50'
-                    }`
-                  }
-                >
-                  <span className="text-lg">{item.emoji}</span>
-                  {item.label}
-                </NavLink>
-              ))}
+              <nav className="flex-1 py-3 px-3 space-y-0.5">
+                {navItems.map(item => (
+                  <NavLink key={item.to} to={item.to} onClick={() => setMobileOpen(false)}
+                    className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50'}`}
+                  >
+                    <span className="text-[11px] w-4 text-center opacity-60">{item.icon}</span>
+                    {item.label}
+                  </NavLink>
+                ))}
+              </nav>
             </div>
           </div>
         )}
 
-        {/* Main Content */}
-        <main className="flex-1 p-4 md:p-6 max-w-full overflow-x-hidden">
+        <main className="flex-1 p-4 md:p-6 overflow-x-hidden">
           <Outlet />
         </main>
       </div>
 
-      {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-purple-100 z-30 shadow-lg">
-        <div className="flex">
+      {/* Mobile bottom nav */}
+      <nav className="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 z-30">
+        <div className="grid grid-cols-6">
           {navItems.map(item => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) =>
-                `flex-1 flex flex-col items-center py-2 text-[10px] font-semibold transition-all ${
-                  isActive ? 'text-purple-700' : 'text-gray-400'
-                }`
-              }
+            <NavLink key={item.to} to={item.to}
+              className={({ isActive }) => `flex flex-col items-center py-2 gap-0.5 text-[10px] font-medium transition-colors ${isActive ? 'text-indigo-600' : 'text-gray-400'}`}
             >
-              <span className="text-xl">{item.emoji}</span>
-              {item.label}
+              <span className="text-base">{['🏠','📖','✍️','🏆','🏅','👤'][navItems.findIndex(n=>n.to===item.to)]}</span>
+              {item.label.split(' ')[0]}
             </NavLink>
           ))}
         </div>

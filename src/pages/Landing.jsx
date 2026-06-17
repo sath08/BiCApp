@@ -1,121 +1,91 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import Navbar from '../components/layout/Navbar'
 
 const features = [
-  { emoji: '📖', title: 'Track Reading', desc: 'Log daily reading sessions and build amazing streaks' },
-  { emoji: '✍️', title: 'Submit Essays', desc: 'Write book reviews, character analyses, and creative pieces' },
-  { emoji: '🏆', title: 'Earn Points', desc: 'Collect XP and climb the leaderboard rankings' },
-  { emoji: '🏅', title: 'Unlock Badges', desc: 'Earn achievement badges as you hit milestones' },
-  { emoji: '🎓', title: 'Expert Feedback', desc: 'Get rubric-based feedback from dedicated teachers' },
-  { emoji: '🔥', title: 'Reading Streaks', desc: 'Build daily habits with streak tracking like Duolingo' },
+  { emoji: '📖', title: 'Daily Reading Log', desc: 'Track sessions, build streaks, earn points for every minute you read' },
+  { emoji: '✍️', title: 'Essay Submission', desc: 'Submit book reviews and analyses for rubric-based teacher feedback' },
+  { emoji: '🏆', title: 'Live Leaderboard', desc: 'Anonymous rankings — see how you stack up without anyone knowing your name' },
+  { emoji: '🏅', title: 'Achievement Badges', desc: 'Unlock badges for streaks, milestones, and exceptional writing' },
+  { emoji: '🎓', title: 'Expert Feedback', desc: 'Get detailed strengths and growth notes from dedicated teachers' },
+  { emoji: '🔥', title: 'Reading Streaks', desc: 'Keep your streak alive daily — the longer the streak, the bigger the badge' },
 ]
 
 const levels = [
-  { emoji: '🌱', name: 'Story Explorer', pts: '25 pts', color: 'from-green-400 to-emerald-500' },
-  { emoji: '⚔️', name: 'Chapter Adventurer', pts: '75 pts', color: 'from-blue-400 to-blue-600' },
-  { emoji: '🚀', name: 'Book Voyager', pts: '150 pts', color: 'from-purple-400 to-purple-600' },
-  { emoji: '🧭', name: 'Novel Navigator', pts: '250 pts', color: 'from-yellow-400 to-orange-500' },
-  { emoji: '🏆', name: 'Future Novelist', pts: '400 pts', color: 'from-red-400 to-pink-600' },
+  { emoji: '🌱', name: 'Story Explorer', pts: '25 pts', color: 'bg-emerald-100 text-emerald-700' },
+  { emoji: '⚔️', name: 'Chapter Adventurer', pts: '75 pts', color: 'bg-blue-100 text-blue-700' },
+  { emoji: '🚀', name: 'Book Voyager', pts: '150 pts', color: 'bg-indigo-100 text-indigo-700' },
+  { emoji: '🧭', name: 'Novel Navigator', pts: '250 pts', color: 'bg-amber-100 text-amber-700' },
+  { emoji: '🏆', name: 'Future Novelist', pts: '400 pts', color: 'bg-orange-100 text-orange-700' },
 ]
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-bg-lavender">
-      <Navbar />
+    <div className="min-h-screen bg-[#F8F9FB]">
+      {/* Nav */}
+      <header className="bg-white border-b border-gray-100 h-14 flex items-center px-6">
+        <div className="max-w-5xl mx-auto w-full flex items-center justify-between">
+          <span className="font-semibold text-gray-900">BIC Champions</span>
+          <div className="flex items-center gap-3">
+            <Link to="/login" className="text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors">Log in</Link>
+            <Link to="/register" className="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors">Register</Link>
+          </div>
+        </div>
+      </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-purple-900 via-purple-700 to-purple-500 text-white py-20 px-4">
-        <div className="absolute inset-0 opacity-10">
-          {['📚', '⭐', '🔥', '🏆', '✍️', '📖'].map((e, i) => (
-            <span key={i} className="absolute text-6xl select-none" style={{ left: `${15 + i * 15}%`, top: `${20 + (i % 2) * 40}%`, opacity: 0.3 }}>
-              {e}
+      <section className="bg-white border-b border-gray-100">
+        <div className="max-w-4xl mx-auto px-6 py-20 text-center">
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-semibold rounded-full mb-6">
+              Bellevue Summer 2026
             </span>
-          ))}
-        </div>
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 200 }}
-            className="text-7xl mb-4"
-          >
-            📚
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 leading-tight"
-          >
-            Bellevue Reading &<br />
-            <span className="text-orange-300">Writing Champions</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="text-lg text-purple-200 mb-10 max-w-xl mx-auto"
-          >
-            Build your reading streak, earn badges, and become a champion reader and writer this summer! 🌟
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-          >
-            <Link
-              to="/register"
-              className="bg-gradient-to-r from-orange-500 to-orange-400 text-white font-bold px-8 py-4 rounded-2xl text-lg shadow-xl hover:from-orange-600 hover:to-orange-500 transition-all hover:scale-105"
-            >
-              🚀 Join the Program!
-            </Link>
-            <Link
-              to="/login"
-              className="bg-white/20 backdrop-blur text-white font-bold px-8 py-4 rounded-2xl text-lg border border-white/30 hover:bg-white/30 transition-all"
-            >
-              📖 Already a Member? Log In
-            </Link>
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight mb-4">
+              Reading &amp; Writing<br />
+              <span className="text-indigo-600">Champions Program</span>
+            </h1>
+            <p className="text-lg text-gray-500 max-w-xl mx-auto mb-8">
+              Build your reading streak, earn recognition levels, and get expert feedback on your writing — all in one place.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link to="/register" className="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-xl hover:bg-indigo-700 transition-colors text-sm">
+                Join the program
+              </Link>
+              <Link to="/login" className="bg-white border border-gray-200 text-gray-700 font-semibold px-6 py-3 rounded-xl hover:bg-gray-50 transition-colors text-sm">
+                Already a member? Log in
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Stats Banner */}
-      <section className="bg-white border-b border-purple-100">
-        <div className="max-w-4xl mx-auto px-4 py-6 grid grid-cols-3 gap-4 text-center">
-          {[
-            { emoji: '👨‍🎓', value: '200+', label: 'Students' },
-            { emoji: '📚', value: '5,000+', label: 'Books Read' },
-            { emoji: '✍️', value: '1,200+', label: 'Essays Written' },
-          ].map((s, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 + 0.8 }}>
-              <div className="text-3xl mb-1">{s.emoji}</div>
-              <div className="text-2xl font-extrabold text-purple-800">{s.value}</div>
-              <div className="text-sm text-gray-500">{s.label}</div>
+      {/* Stats */}
+      <section className="py-10 px-6 border-b border-gray-100">
+        <div className="max-w-3xl mx-auto grid grid-cols-3 gap-6 text-center">
+          {[['200+', 'Students enrolled'], ['5,000+', 'Books read'], ['1,200+', 'Essays written']].map(([v, l], i) => (
+            <motion.div key={l} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.1 + 0.3 }}>
+              <p className="text-2xl font-bold text-gray-900">{v}</p>
+              <p className="text-sm text-gray-500 mt-0.5">{l}</p>
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* Features */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-6">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-extrabold text-purple-900 text-center mb-2">Why Students Love BIC 💜</h2>
-          <p className="text-gray-500 text-center mb-10">A fun, gamified learning experience</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Everything you need to grow as a reader</h2>
+            <p className="text-gray-500 text-sm">Built for students in grades 1–8</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {features.map((f, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-white rounded-2xl p-6 shadow-sm border border-purple-50 hover:shadow-md transition-all hover:-translate-y-1"
+              <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.07 }} viewport={{ once: true }}
+                className="bg-white rounded-xl border border-gray-100 p-5"
               >
-                <div className="text-4xl mb-3">{f.emoji}</div>
-                <h3 className="font-bold text-purple-900 mb-1">{f.title}</h3>
-                <p className="text-sm text-gray-500">{f.desc}</p>
+                <span className="text-2xl mb-3 block">{f.emoji}</span>
+                <h3 className="font-semibold text-gray-900 mb-1 text-sm">{f.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -123,27 +93,21 @@ export default function Landing() {
       </section>
 
       {/* Recognition Levels */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-extrabold text-purple-900 text-center mb-2">Recognition Levels 🎖️</h2>
-          <p className="text-gray-500 text-center mb-10">Earn points and unlock prestigious titles</p>
-          <div className="space-y-3">
+      <section className="py-16 px-6 bg-white border-t border-gray-100">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Recognition levels</h2>
+            <p className="text-gray-500 text-sm">Earn points through reading and writing to unlock each title</p>
+          </div>
+          <div className="space-y-2">
             {levels.map((l, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl"
+              <motion.div key={i} initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.08 }} viewport={{ once: true }}
+                className="flex items-center gap-4 p-3.5 rounded-xl border border-gray-100 bg-[#F8F9FB]"
               >
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${l.color} flex items-center justify-center text-2xl`}>
-                  {l.emoji}
-                </div>
-                <div className="flex-1">
-                  <div className="font-bold text-gray-900">{l.name}</div>
-                </div>
-                <div className="font-bold text-purple-700 bg-purple-100 px-3 py-1 rounded-full text-sm">{l.pts}</div>
+                <span className="text-xl w-8 text-center">{l.emoji}</span>
+                <span className="flex-1 font-medium text-gray-900 text-sm">{l.name}</span>
+                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${l.color}`}>{l.pts}</span>
               </motion.div>
             ))}
           </div>
@@ -151,27 +115,18 @@ export default function Landing() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 px-4 bg-gradient-to-r from-purple-800 to-purple-600 text-white text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <div className="text-5xl mb-4">🌟</div>
-          <h2 className="text-3xl font-extrabold mb-4">Ready to Become a Champion?</h2>
-          <p className="text-purple-200 mb-8 text-lg">Join hundreds of students building their reading and writing skills!</p>
-          <Link
-            to="/register"
-            className="inline-block bg-gradient-to-r from-orange-500 to-orange-400 text-white font-bold px-10 py-4 rounded-2xl text-lg shadow-xl hover:from-orange-600 hover:to-orange-500 transition-all hover:scale-105"
-          >
-            🚀 Start Your Journey Today!
+      <section className="py-16 px-6 text-center">
+        <div className="max-w-md mx-auto">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">Ready to become a champion?</h2>
+          <p className="text-gray-500 text-sm mb-6">Join hundreds of students building real reading and writing skills this summer.</p>
+          <Link to="/register" className="inline-flex items-center gap-2 bg-indigo-600 text-white font-semibold px-6 py-3 rounded-xl hover:bg-indigo-700 transition-colors text-sm">
+            Get started — it's free
           </Link>
-        </motion.div>
+        </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-purple-950 text-purple-300 py-8 text-center text-sm">
-        <p>© 2026 Bellevue Reading & Writing Champions Program. All rights reserved. 📚</p>
+      <footer className="border-t border-gray-100 py-6 text-center text-xs text-gray-400">
+        © 2026 Bellevue Reading &amp; Writing Champions Program
       </footer>
     </div>
   )

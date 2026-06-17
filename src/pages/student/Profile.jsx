@@ -1,97 +1,76 @@
-import { motion } from 'framer-motion'
 import { useStudentContext } from '../../contexts/StudentContext'
 import { useStudent, useBadges } from '../../hooks/useStudent'
 import { usePoints } from '../../hooks/usePoints'
 import { getRecognitionLevel } from '../../lib/localStore'
-import Card from '../../components/ui/Card'
-import ProgressBar from '../../components/ui/ProgressBar'
+import { useNavigate } from 'react-router-dom'
+import Button from '../../components/ui/Button'
 
 export default function Profile() {
-  const { student, logoutStudent } = useStudentContext()
-  const { data: studentData } = useStudent(student?.studentId)
-  const { data: pointsData } = usePoints(student?.studentId)
-  const { data: badges = [] } = useBadges(student?.studentId)
+  const { student: ctx, logoutStudent } = useStudentContext()
+  const { data: profile } = useStudent(ctx?.studentId)
+  const { data: points } = usePoints(ctx?.studentId)
+  const { data: badges = [] } = useBadges(ctx?.studentId)
+  const navigate = useNavigate()
 
-  const totalPoints = pointsData?.total ?? studentData?.total_points ?? 0
-  const streak = studentData?.reading_streak ?? 0
-  const { current: level } = getRecognitionLevel(totalPoints)
+  const totalPts = points?.total ?? 0
+  const { current: level, next: nextLevel, progressToNext } = getRecognitionLevel(totalPts)
+
+  function handleLogout() { logoutStudent(); navigate('/') }
 
   return (
-    <div className="space-y-6 pb-20 md:pb-6 max-w-2xl mx-auto">
-      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-br from-purple-800 to-purple-600 rounded-2xl p-6 text-white text-center relative overflow-hidden"
-      >
-        <div className="absolute inset-0 opacity-10 text-9xl flex items-center justify-center">👤</div>
-        <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-extrabold">
-          {student?.firstName?.[0]}{student?.lastName?.[0]}
-        </div>
-        <h1 className="text-2xl font-extrabold">{student?.firstName} {student?.lastName}</h1>
-        <p className="text-purple-300 text-sm">Grade {student?.grade} • {student?.school}</p>
-        <p className="text-purple-400 text-xs mt-1">{student?.anonymousId}</p>
-        <div className="flex justify-center gap-2 mt-4">
-          <span className="bg-white/20 px-4 py-1.5 rounded-full text-sm font-bold">{level.emoji} {level.name}</span>
-        </div>
-      </motion.div>
-
-      <div className="grid grid-cols-3 gap-3">
-        <Card className="text-center p-4">
-          <div className="text-2xl font-extrabold text-purple-700">{totalPoints}</div>
-          <div className="text-xs text-gray-500 mt-1">Total XP</div>
-        </Card>
-        <Card className="text-center p-4">
-          <div className="text-2xl font-extrabold text-orange-500">{streak}🔥</div>
-          <div className="text-xs text-gray-500 mt-1">Day Streak</div>
-        </Card>
-        <Card className="text-center p-4">
-          <div className="text-2xl font-extrabold text-teal-600">{badges.length}</div>
-          <div className="text-xs text-gray-500 mt-1">Badges</div>
-        </Card>
+    <div className="max-w-lg space-y-4">
+      <div>
+        <h1 className="text-xl font-bold text-gray-900">Profile</h1>
       </div>
 
-      <Card>
-        <h2 className="font-bold text-purple-900 mb-4">👤 Student Info</h2>
-        <div className="space-y-3">
-          {[
-            { label: 'Full Name', value: `${student?.firstName} ${student?.lastName}` },
-            { label: 'Grade', value: `Grade ${student?.grade}` },
-            { label: 'School', value: student?.school },
-            { label: 'Anonymous ID', value: student?.anonymousId },
-          ].map(item => (
-            <div key={item.label} className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
-              <span className="text-sm text-gray-500 font-medium">{item.label}</span>
-              <span className="text-sm font-semibold text-gray-800">{item.value}</span>
+      {/* Identity card */}
+      <div className="bg-white rounded-xl border border-gray-100 shadow-card p-5">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-lg">
+            {ctx?.firstName?.[0]}{ctx?.lastName?.[0]}
+          </div>
+          <div>
+            <p className="font-semibold text-gray-900">{ctx?.firstName} {ctx?.lastName}</p>
+            <p className="text-sm text-gray-500">Grade {ctx?.grade} · {ctx?.school}</p>
+            <p className="text-xs text-gray-400 mt-0.5 font-mono">{ctx?.anonymousId}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Level progress */}
+      <div className="bg-white rounded-xl border border-gray-100 shadow-card p-5">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2.5">
+            <span className="text-2xl">{level.emoji}</span>
+            <div>
+              <p className="font-semibold text-gray-900 text-sm">{level.name}</p>
+              <p className="text-xs text-gray-500">{totalPts} XP earned</p>
             </div>
-          ))}
+          </div>
+          {nextLevel && <p className="text-xs text-indigo-600 font-medium">{nextLevel.minPoints - totalPts} XP to {nextLevel.name}</p>}
         </div>
-      </Card>
+        {nextLevel && (
+          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${progressToNext}%` }} />
+          </div>
+        )}
+      </div>
 
-      <Card>
-        <h2 className="font-bold text-purple-900 mb-4">⭐ Points History</h2>
-        <div className="space-y-2">
-          {(pointsData?.ledger || []).map((p, i) => (
-            <motion.div key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.05 }}
-              className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0"
-            >
-              <div>
-                <p className="text-sm font-medium text-gray-700">{p.description}</p>
-                {p.awarded_by && <p className="text-xs text-gray-400">By {p.awarded_by}</p>}
-                <p className="text-xs text-gray-400">{new Date(p.created_at).toLocaleDateString()}</p>
-              </div>
-              <span className="font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full text-sm">+{p.points} ⭐</span>
-            </motion.div>
-          ))}
-          {(!pointsData?.ledger || pointsData.ledger.length === 0) && (
-            <p className="text-sm text-gray-400 text-center py-4">No points yet. Start reading! 📖</p>
-          )}
-        </div>
-      </Card>
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { label: 'Total XP', value: totalPts },
+          { label: 'Badges', value: badges.filter(b => b.earned).length },
+          { label: 'Points log', value: points?.ledger?.length ?? 0 },
+        ].map(s => (
+          <div key={s.label} className="bg-white rounded-xl border border-gray-100 shadow-card p-3.5 text-center">
+            <p className="text-xl font-bold text-gray-900">{s.value}</p>
+            <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
+          </div>
+        ))}
+      </div>
 
-      <button onClick={logoutStudent}
-        className="w-full bg-red-50 text-red-600 font-bold py-3 rounded-xl border border-red-200 hover:bg-red-100 transition-colors"
-      >
-        🚪 Log Out
-      </button>
+      <Button variant="outline" onClick={handleLogout} fullWidth>Log out</Button>
     </div>
   )
 }

@@ -1,119 +1,138 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useStudentContext } from '../../contexts/StudentContext'
-import { useEssays, useSubmitEssay } from '../../hooks/useEssays'
-import EssayForm from '../../components/forms/EssayForm'
-import Card from '../../components/ui/Card'
-import { StatusBadge } from '../../components/ui/Badge'
-import CelebrationOverlay from '../../components/ui/CelebrationOverlay'
+import { getEssays, addEssay, getWritingAssignments } from '../../lib/localStore'
+import { Link } from 'react-router-dom'
+import Button from '../../components/ui/Button'
+
+const STATUS_STYLE = {
+  pending:  'bg-amber-50 text-amber-700',
+  approved: 'bg-emerald-50 text-emerald-700',
+  needs_revision: 'bg-rose-50 text-rose-700',
+}
+
 export default function Writing() {
   const { student } = useStudentContext()
-  const { data: essays = [] } = useEssays(student?.studentId)
-  const submitEssay = useSubmitEssay()
-  const [showForm, setShowForm] = useState(false)
-  const [celebration, setCelebration] = useState(false)
+  const qc = useQueryClient()
+  const [mode, setMode] = useState('list')
+  const [title, setTitle] = useState('')
+  const [body, setBody] = useState('')
+  const [assignmentId, setAssignmentId] = useState('')
+  const [success, setSuccess] = useState(false)
 
-  async function handleSubmit(data) {
-    await submitEssay.mutateAsync({ studentId: student?.studentId, data })
-    setShowForm(false)
-    setCelebration(true)
-  }
+  const { data: submissions = [] } = useQuery({
+    queryKey: ['essays', student.studentId],
+    queryFn: () => getEssays(student.studentId)
+  })
+  const { data: writingAssignments = [] } = useQuery({ queryKey: ['writing-assignments'], queryFn: () => getWritingAssignments(true) })
 
-  const approved = essays.filter(e => e.status === 'approved').length
-  const pending = essays.filter(e => ['submitted', 'under_review'].includes(e.status)).length
-  const needsRevision = essays.filter(e => e.status === 'revision_requested').length
+  const submit = useMutation({
+    mutationFn: () => addEssay(student.studentId, { title, body, assignment_id: assignmentId || null }),
+    onSuccess: () => {
+      qc.invalidateQueries(['essays'])
+      setMode('list'); setTitle(''); setBody(''); setAssignmentId(''); setSuccess(true)
+      setTimeout(() => setSuccess(false), 3000)
+    }
+  })
 
-  return (
-    <div className="space-y-6 pb-20 md:pb-6">
-      <CelebrationOverlay
-        show={celebration}
-        title="Essay Submitted! 🎉"
-        message="Your essay is now under review. Great work!"
-        emoji="✍️"
-        onClose={() => setCelebration(false)}
-      />
+  const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'
 
-      <div className="bg-gradient-to-r from-orange-600 to-orange-400 rounded-2xl p-5 text-white">
-        <h1 className="text-2xl font-extrabold mb-1">✍️ Writing Hub</h1>
-        <p className="text-orange-100 text-sm">Submit your essays and get expert feedback</p>
+  if (mode === 'write') return (
+    <div className="p-6 max-w-2xl mx-auto space-y-4">
+      <div className="flex items-center gap-3">
+        <button onClick={() => setMode('list')} className="text-sm text-gray-500 hover:text-gray-900 flex items-center gap-1">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          Back
+        </button>
+        <h1 className="text-xl font-bold text-gray-900">New Submission</h1>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white rounded-2xl p-4 text-center shadow-sm border border-purple-50">
-          <div className="text-2xl font-extrabold text-green-600">{approved}</div>
-          <div className="text-xs text-gray-500 mt-1">✅ Approved</div>
+      {writingAssignments.length > 0 && (
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Prompt (optional)</label>
+          <select value={assignmentId} onChange={e => setAssignmentId(e.target.value)} className={inputCls}>
+            <option value="">Free write</option>
+            {writingAssignments.map(a => <option key={a.id} value={a.id}>{a.title}</option>)}
+          </select>
         </div>
-        <div className="bg-white rounded-2xl p-4 text-center shadow-sm border border-purple-50">
-          <div className="text-2xl font-extrabold text-blue-600">{pending}</div>
-          <div className="text-xs text-gray-500 mt-1">🔍 In Review</div>
-        </div>
-        <div className="bg-white rounded-2xl p-4 text-center shadow-sm border border-purple-50">
-          <div className="text-2xl font-extrabold text-orange-600">{needsRevision}</div>
-          <div className="text-xs text-gray-500 mt-1">✏️ Needs Revision</div>
-        </div>
-      </div>
-
-      {showForm ? (
-        <Card>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-purple-900">📝 New Essay</h2>
-            <button onClick={() => setShowForm(false)} className="text-gray-400 hover:text-red-500 font-bold text-xl">×</button>
-          </div>
-          <EssayForm onSubmit={handleSubmit} loading={submitEssay.isPending} />
-        </Card>
-      ) : (
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => setShowForm(true)}
-          className="w-full bg-gradient-to-r from-orange-500 to-orange-400 text-white font-bold py-4 rounded-2xl shadow-lg shadow-orange-200 flex items-center justify-center gap-2 text-lg"
-        >
-          ✍️ Write a New Essay
-        </motion.button>
       )}
 
-      <Card>
-        <h2 className="font-bold text-purple-900 mb-4">📋 My Essays</h2>
-        {essays.length === 0 ? (
-          <div className="text-center py-8 text-gray-400">
-            <div className="text-5xl mb-3">📝</div>
-            <p>No essays yet. Write your first one!</p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {essays.map((essay, i) => (
-              <motion.div
-                key={essay.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-              >
-                <Link to={`/student/writing/${essay.id}`}>
-                  <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-purple-50 transition-colors group">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <p className="font-semibold text-gray-800 text-sm">{essay.book_title}</p>
-                        <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full capitalize">{essay.assignment_type}</span>
-                      </div>
-                      <p className="text-xs text-gray-500">{essay.essay_type} • by {essay.author}</p>
-                      {essay.submitted_at && (
-                        <p className="text-xs text-gray-400 mt-1">
-                          Submitted {new Date(essay.submitted_at).toLocaleDateString()}
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex flex-col items-end gap-2">
-                      <StatusBadge status={essay.status} />
-                      <span className="text-xs text-purple-500 group-hover:text-purple-700 font-semibold">View →</span>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-1">Title</label>
+        <input value={title} onChange={e => setTitle(e.target.value)} className={inputCls} placeholder="Give your piece a title" />
+      </div>
+
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-1">Your Writing</label>
+        <textarea value={body} onChange={e => setBody(e.target.value)} rows={12} className={inputCls}
+          placeholder="Write your essay, story, or reflection here..." />
+        <p className="text-xs text-gray-400 mt-1">{body.split(/\s+/).filter(Boolean).length} words</p>
+      </div>
+
+      <div className="flex gap-2">
+        <Button variant="outline" onClick={() => setMode('list')}>Cancel</Button>
+        <Button variant="primary" loading={submit.isPending} disabled={!title.trim() || !body.trim()} onClick={() => submit.mutate()}>
+          Submit for Review
+        </Button>
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="p-6 max-w-2xl mx-auto space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-bold text-gray-900">Writing</h1>
+          <p className="text-sm text-gray-500 mt-0.5">{submissions.length} submissions</p>
+        </div>
+        <Button variant="primary" size="sm" onClick={() => setMode('write')}>New Submission</Button>
+      </div>
+
+      {success && (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-3 text-sm text-emerald-700">
+          Submitted for review! Your teacher will provide feedback soon.
+        </div>
+      )}
+
+      {writingAssignments.length > 0 && (
+        <div className="bg-white rounded-xl border border-gray-100 shadow-card p-4">
+          <h2 className="text-sm font-semibold text-gray-900 mb-3">Active Prompts</h2>
+          <div className="space-y-2">
+            {writingAssignments.map(a => (
+              <div key={a.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                <div>
+                  <p className="text-sm text-gray-900">{a.title}</p>
+                  {a.description && <p className="text-xs text-gray-500 mt-0.5">{a.description}</p>}
+                </div>
+                <span className="text-xs font-medium text-indigo-600">{a.points_reward} pts</span>
+              </div>
             ))}
           </div>
+        </div>
+      )}
+
+      <div className="space-y-3">
+        {submissions.length === 0 && (
+          <div className="text-center py-12 text-sm text-gray-400">
+            No submissions yet. Start writing!
+          </div>
         )}
-      </Card>
+        {submissions.map(s => (
+          <Link key={s.id} to={`/student/writing/${s.id}`}
+            className="block bg-white rounded-xl border border-gray-100 shadow-card p-4 hover:shadow-card-hover transition-shadow">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-gray-900">{s.title}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{new Date(s.created_at).toLocaleDateString()}</p>
+                <p className="text-xs text-gray-500 mt-1.5 line-clamp-2">{s.body}</p>
+              </div>
+              <span className={`text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${STATUS_STYLE[s.status] || 'bg-gray-100 text-gray-600'}`}>
+                {s.status === 'needs_revision' ? 'Revision' : s.status.charAt(0).toUpperCase() + s.status.slice(1)}
+              </span>
+            </div>
+          </Link>
+        ))}
+      </div>
     </div>
   )
 }
