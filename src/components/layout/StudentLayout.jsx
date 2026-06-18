@@ -20,9 +20,9 @@ export default function StudentLayout() {
   function handleLogout() { logoutStudent(); navigate('/') }
 
   return (
-    <div className="min-h-screen bg-[#F8F9FB] flex flex-col">
+    <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Header */}
-      <header className="h-14 bg-white border-b border-gray-100 sticky top-0 z-30 flex items-center px-4">
+      <header className="h-14 bg-white border-b border-gray-200 sticky top-0 z-30 flex items-center px-4">
         <div className="flex items-center gap-3 flex-1">
           <button className="md:hidden p-1.5 rounded-lg hover:bg-gray-100 text-gray-500" onClick={() => setMobileOpen(true)}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
@@ -41,18 +41,18 @@ export default function StudentLayout() {
 
       <div className="flex flex-1 min-h-0">
         {/* Sidebar */}
-        <aside className="hidden md:flex flex-col w-52 bg-white border-r border-gray-100 sticky top-14 h-[calc(100vh-3.5rem)]">
+        <aside className="hidden md:flex flex-col w-52 bg-white border-r border-gray-200 sticky top-14 h-[calc(100vh-3.5rem)]">
           <nav className="flex-1 py-4 px-3 space-y-0.5 overflow-y-auto">
             {navItems.map(item => (
               <NavLink key={item.to} to={item.to}
-                className={({ isActive }) => `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
+                className={({ isActive }) => `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'}`}
               >
                 <span className="text-[11px] w-4 text-center opacity-60">{item.icon}</span>
                 {item.label}
               </NavLink>
             ))}
           </nav>
-          <div className="p-3 border-t border-gray-100">
+          <div className="p-3 border-t border-gray-200">
             <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-orange-50">
               <span className="text-base">🔥</span>
               <div>
@@ -68,13 +68,13 @@ export default function StudentLayout() {
           <div className="fixed inset-0 z-40 md:hidden">
             <div className="absolute inset-0 bg-black/20" onClick={() => setMobileOpen(false)} />
             <div className="absolute left-0 top-0 bottom-0 w-60 bg-white shadow-xl flex flex-col">
-              <div className="h-14 flex items-center px-4 border-b border-gray-100">
+              <div className="h-14 flex items-center px-4 border-b border-gray-200">
                 <span className="font-semibold text-gray-900">BIC Champions</span>
               </div>
               <nav className="flex-1 py-3 px-3 space-y-0.5">
                 {navItems.map(item => (
                   <NavLink key={item.to} to={item.to} onClick={() => setMobileOpen(false)}
-                    className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50'}`}
+                    className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-50'}`}
                   >
                     <span className="text-[11px] w-4 text-center opacity-60">{item.icon}</span>
                     {item.label}
@@ -91,7 +91,7 @@ export default function StudentLayout() {
       </div>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 z-30">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 z-30">
         <div className="grid grid-cols-6">
           {navItems.map(item => (
             <NavLink key={item.to} to={item.to}

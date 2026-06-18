@@ -20,9 +20,9 @@ const levels = [
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-[#F8F9FB]">
+    <div className="min-h-screen bg-gray-100">
       {/* Nav */}
-      <header className="bg-white border-b border-gray-100 h-14 flex items-center px-6">
+      <header className="bg-white border-b border-gray-200 h-14 flex items-center px-6">
         <div className="max-w-5xl mx-auto w-full flex items-center justify-between">
           <span className="font-semibold text-gray-900">BIC Champions</span>
           <div className="flex items-center gap-3">
@@ -33,7 +33,7 @@ export default function Landing() {
       </header>
 
       {/* Hero */}
-      <section className="bg-white border-b border-gray-100">
+      <section className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-6 py-20 text-center">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-semibold rounded-full mb-6">
@@ -59,7 +59,7 @@ export default function Landing() {
       </section>
 
       {/* Stats */}
-      <section className="py-10 px-6 border-b border-gray-100">
+      <section className="py-10 px-6 border-b border-gray-200">
         <div className="max-w-3xl mx-auto grid grid-cols-3 gap-6 text-center">
           {[['200+', 'Students enrolled'], ['5,000+', 'Books read'], ['1,200+', 'Essays written']].map(([v, l], i) => (
             <motion.div key={l} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.1 + 0.3 }}>
@@ -81,7 +81,7 @@ export default function Landing() {
             {features.map((f, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.07 }} viewport={{ once: true }}
-                className="bg-white rounded-xl border border-gray-100 p-5"
+                className="bg-white rounded-xl border border-gray-200 p-5"
               >
                 <span className="text-2xl mb-3 block">{f.emoji}</span>
                 <h3 className="font-semibold text-gray-900 mb-1 text-sm">{f.title}</h3>
@@ -93,7 +93,7 @@ export default function Landing() {
       </section>
 
       {/* Recognition Levels */}
-      <section className="py-16 px-6 bg-white border-t border-gray-100">
+      <section className="py-16 px-6 bg-white border-t border-gray-200">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Recognition levels</h2>
@@ -103,7 +103,7 @@ export default function Landing() {
             {levels.map((l, i) => (
               <motion.div key={i} initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.08 }} viewport={{ once: true }}
-                className="flex items-center gap-4 p-3.5 rounded-xl border border-gray-100 bg-[#F8F9FB]"
+                className="flex items-center gap-4 p-3.5 rounded-xl border border-gray-200 bg-gray-100"
               >
                 <span className="text-xl w-8 text-center">{l.emoji}</span>
                 <span className="flex-1 font-medium text-gray-900 text-sm">{l.name}</span>
@@ -125,7 +125,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <footer className="border-t border-gray-100 py-6 text-center text-xs text-gray-400">
+      <footer className="border-t border-gray-200 py-6 text-center text-xs text-gray-400">
         © 2026 Bellevue Reading &amp; Writing Champions Program
       </footer>
     </div>

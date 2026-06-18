@@ -64,7 +64,7 @@ export default function Leaderboard() {
       </div>
 
       {/* Board */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-card divide-y divide-gray-50">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm divide-y divide-gray-50">
         {board.map((e, i) => {
           const isMe = e.anonymous_id === student?.anonymousId
           return (

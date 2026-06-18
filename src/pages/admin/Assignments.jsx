@@ -23,7 +23,7 @@ export default function Assignments() {
 
   const shown = filter === 'all' ? assignments : assignments.filter(a => a.type === filter)
 
-  const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'
+  const inputCls = 'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'
   const labelCls = 'block text-xs font-medium text-gray-600 mb-1'
 
   return (
@@ -48,7 +48,7 @@ export default function Assignments() {
       <div className="space-y-3">
         {shown.length === 0 && <p className="text-sm text-gray-400 text-center py-8">No assignments found.</p>}
         {shown.map(a => (
-          <div key={a.id} className="bg-white rounded-xl border border-gray-100 shadow-card p-4">
+          <div key={a.id} className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
             <div className="flex items-start gap-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">

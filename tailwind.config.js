@@ -13,8 +13,8 @@ export default {
           dark: '#3730A3',
         },
         bg: {
-          base: '#F8F9FB',
-          lavender: '#F8F9FB',
+          base: '#E8EAED',
+          lavender: '#E8EAED',
         },
       },
       fontFamily: {

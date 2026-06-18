@@ -21,7 +21,7 @@ export default function ReadingLog() {
     setTimeout(() => setSuccess(false), 3000)
   }
 
-  const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow'
+  const inputCls = 'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow'
   const labelCls = 'block text-xs font-medium text-gray-600 mb-1'
 
   return (
@@ -31,7 +31,7 @@ export default function ReadingLog() {
         <p className="text-sm text-gray-500 mt-0.5">Log your daily reading session to earn points and keep your streak</p>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100 shadow-card p-5">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
         <AnimatePresence>
           {success && (
             <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
@@ -75,7 +75,7 @@ export default function ReadingLog() {
 
       {/* History */}
       {logs.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-card">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
           <div className="px-4 py-3 border-b border-gray-50">
             <p className="text-sm font-semibold text-gray-900">History</p>
           </div>

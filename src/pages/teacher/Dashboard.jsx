@@ -23,7 +23,7 @@ export default function TeacherDashboard() {
           { label: 'Pending reviews', value: pending.length, alert: pending.length > 3 },
           { label: 'Completed', value: completed.length },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-xl border border-gray-100 shadow-card p-4 text-center">
+          <div key={s.label} className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 text-center">
             <p className={`text-2xl font-bold ${s.alert ? 'text-orange-500' : 'text-gray-900'}`}>{s.value}</p>
             <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
           </div>
@@ -32,7 +32,7 @@ export default function TeacherDashboard() {
 
       {/* Pending reviews */}
       {pending.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-card">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
             <p className="text-sm font-semibold text-gray-900">Needs review</p>
             <Link to="/teacher/reviews" className="text-xs text-emerald-600 hover:underline">View all</Link>
@@ -54,7 +54,7 @@ export default function TeacherDashboard() {
       )}
 
       {/* Students */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-card">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
           <p className="text-sm font-semibold text-gray-900">My students</p>
           <Link to="/teacher/students" className="text-xs text-emerald-600 hover:underline">View all</Link>

@@ -25,7 +25,7 @@ export default function AdminStudents() {
     setShowAdd(false); reset()
   }
 
-  const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow'
+  const inputCls = 'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow'
   const labelCls = 'block text-xs font-medium text-gray-600 mb-1'
 
   return (
@@ -41,11 +41,11 @@ export default function AdminStudents() {
       <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search students..."
         className={inputCls} />
 
-      <div className="bg-white rounded-xl border border-gray-100 shadow-card overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-100">
+              <tr className="border-b border-gray-200">
                 {['Student', 'Grade', 'School', 'Points', 'Level', 'Status', ''].map(h => (
                   <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{h}</th>
                 ))}

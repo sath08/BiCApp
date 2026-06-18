@@ -34,12 +34,12 @@ export default function Login() {
     finally { setLoading(false) }
   }
 
-  const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow'
+  const inputCls = 'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow'
   const labelCls = 'block text-xs font-medium text-gray-600 mb-1'
 
   return (
-    <div className="min-h-screen bg-[#F8F9FB] flex flex-col">
-      <header className="h-14 bg-white border-b border-gray-100 flex items-center px-6">
+    <div className="min-h-screen bg-gray-100 flex flex-col">
+      <header className="h-14 bg-white border-b border-gray-200 flex items-center px-6">
         <Link to="/" className="text-sm text-gray-500 hover:text-gray-900 font-medium flex items-center gap-1.5 transition-colors">
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
           Back
@@ -64,7 +64,7 @@ export default function Login() {
             >Teacher / Admin</button>
           </div>
 
-          <div className="bg-white rounded-xl border border-gray-100 shadow-card p-5">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
             <AnimatePresence mode="wait">
               {tab === 'student' ? (
                 <motion.div key="student" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.12 }}>

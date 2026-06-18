@@ -43,7 +43,7 @@ export default function StudentDashboard() {
       </div>
 
       {/* Level progress */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-card p-4">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2.5">
             <span className="text-2xl">{level.emoji}</span>
@@ -73,7 +73,7 @@ export default function StudentDashboard() {
           { label: 'Streak', value: `${ctx?.readingStreak || profile?.reading_streak || 5}d`, sub: 'days reading' },
           { label: 'Badges', value: badges.filter(b => b.earned).length, sub: 'unlocked' },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-xl border border-gray-100 shadow-card p-3.5 text-center">
+          <div key={s.label} className="bg-white rounded-xl border border-gray-200 shadow-sm p-3.5 text-center">
             <p className="text-xl font-bold text-gray-900">{s.value}</p>
             <p className="text-xs text-gray-500 mt-0.5">{s.sub}</p>
           </div>
@@ -81,7 +81,7 @@ export default function StudentDashboard() {
       </div>
 
       {/* Activity chart */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-card p-4">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
         <p className="text-sm font-semibold text-gray-900 mb-3">Reading this week</p>
         <ResponsiveContainer width="100%" height={100}>
           <BarChart data={chartData} barSize={20}>
@@ -99,7 +99,7 @@ export default function StudentDashboard() {
           <p className="font-semibold text-sm">Log reading</p>
           <p className="text-xs text-indigo-200 mt-0.5">Add today's session</p>
         </Link>
-        <Link to="/student/writing" className="bg-white border border-gray-100 shadow-card text-gray-900 rounded-xl p-4 hover:bg-gray-50 transition-colors">
+        <Link to="/student/writing" className="bg-white border border-gray-200 shadow-sm text-gray-900 rounded-xl p-4 hover:bg-gray-50 transition-colors">
           <p className="text-lg mb-1">✍️</p>
           <p className="font-semibold text-sm">Write an essay</p>
           <p className="text-xs text-gray-400 mt-0.5">{pendingEssays.length} pending review</p>
@@ -108,7 +108,7 @@ export default function StudentDashboard() {
 
       {/* Recent logs */}
       {recentLogs.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-card">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
             <p className="text-sm font-semibold text-gray-900">Recent reading</p>
             <Link to="/student/reading-log" className="text-xs text-indigo-600 hover:underline">View all</Link>

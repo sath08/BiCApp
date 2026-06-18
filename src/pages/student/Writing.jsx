@@ -35,7 +35,7 @@ export default function Writing() {
     }
   })
 
-  const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'
+  const inputCls = 'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'
 
   if (mode === 'write') return (
     <div className="p-6 max-w-2xl mx-auto space-y-4">
@@ -95,7 +95,7 @@ export default function Writing() {
       )}
 
       {writingAssignments.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-card p-4">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
           <h2 className="text-sm font-semibold text-gray-900 mb-3">Active Prompts</h2>
           <div className="space-y-2">
             {writingAssignments.map(a => (
@@ -119,7 +119,7 @@ export default function Writing() {
         )}
         {submissions.map(s => (
           <Link key={s.id} to={`/student/writing/${s.id}`}
-            className="block bg-white rounded-xl border border-gray-100 shadow-card p-4 hover:shadow-card-hover transition-shadow">
+            className="block bg-white rounded-xl border border-gray-200 shadow-sm p-4 hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-gray-900">{s.title}</p>

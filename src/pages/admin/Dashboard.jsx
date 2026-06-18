@@ -32,7 +32,7 @@ export default function AdminDashboard() {
           { label: 'Pending Reviews', value: stats?.pending_reviews ?? 0, alert: true },
           { label: 'Award Eligible', value: awardEligible.length },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-xl border border-gray-100 shadow-card p-4 text-center">
+          <div key={s.label} className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 text-center">
             <p className={`text-2xl font-bold ${s.alert && s.value > 3 ? 'text-orange-500' : 'text-gray-900'}`}>{s.value}</p>
             <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
           </div>
@@ -40,7 +40,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Growth chart */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-card p-5">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
         <p className="text-sm font-semibold text-gray-900 mb-4">Program Growth</p>
         <ResponsiveContainer width="100%" height={180}>
           <LineChart data={monthlyData}>
@@ -60,7 +60,7 @@ export default function AdminDashboard() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {/* Teachers */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-card">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
           <p className="text-sm font-semibold text-gray-900 px-4 py-3 border-b border-gray-50">Teachers</p>
           <div className="divide-y divide-gray-50">
             {teachers.filter(t => t.is_active).map(t => (
@@ -78,7 +78,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Award eligible */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-card">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
           <p className="text-sm font-semibold text-gray-900 px-4 py-3 border-b border-gray-50">Award Eligible</p>
           <div className="divide-y divide-gray-50">
             {awardEligible.slice(0, 5).map(s => {

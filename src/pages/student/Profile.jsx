@@ -24,7 +24,7 @@ export default function Profile() {
       </div>
 
       {/* Identity card */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-card p-5">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-lg">
             {ctx?.firstName?.[0]}{ctx?.lastName?.[0]}
@@ -38,7 +38,7 @@ export default function Profile() {
       </div>
 
       {/* Level progress */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-card p-5">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2.5">
             <span className="text-2xl">{level.emoji}</span>
@@ -63,7 +63,7 @@ export default function Profile() {
           { label: 'Badges', value: badges.filter(b => b.earned).length },
           { label: 'Points log', value: points?.ledger?.length ?? 0 },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-xl border border-gray-100 shadow-card p-3.5 text-center">
+          <div key={s.label} className="bg-white rounded-xl border border-gray-200 shadow-sm p-3.5 text-center">
             <p className="text-xl font-bold text-gray-900">{s.value}</p>
             <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
           </div>

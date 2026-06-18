@@ -40,7 +40,7 @@ export default function Awards() {
 
       <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
         {DEFAULT_LEVELS.map(l => (
-          <div key={l.name} className="bg-white rounded-xl border border-gray-100 shadow-card p-4 text-center">
+          <div key={l.name} className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 text-center">
             <div className={`w-8 h-8 rounded-full ${l.color} mx-auto mb-2`} />
             <p className="text-xs font-semibold text-gray-900">{l.name}</p>
             <p className="text-xs text-gray-400 mt-0.5">{l.min}–{l.max === Infinity ? '∞' : l.max} pts</p>
@@ -48,7 +48,7 @@ export default function Awards() {
         ))}
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100 shadow-card">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
         <div className="px-5 py-4 border-b border-gray-50">
           <h2 className="text-sm font-semibold text-gray-900">Award-Eligible Students</h2>
           <p className="text-xs text-gray-500 mt-0.5">{eligible.length} students with 100+ points</p>
@@ -72,7 +72,7 @@ export default function Awards() {
 
       {awarding && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-xl w-full max-w-sm p-6">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-xl w-full max-w-sm p-6">
             <h3 className="text-base font-semibold text-gray-900 mb-1">Confirm Award</h3>
             <p className="text-sm text-gray-600 mb-4">Award <strong>{awarding.level.name}</strong> to <strong>{awarding.realName}</strong>?</p>
             <div className="flex gap-2">

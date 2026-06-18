@@ -16,7 +16,7 @@ export default function AdminTeachers() {
     onSuccess: () => { qc.invalidateQueries(['teachers']); reset(); setOpen(false) }
   })
 
-  const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'
+  const inputCls = 'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'
   const labelCls = 'block text-xs font-medium text-gray-600 mb-1'
 
   return (
@@ -31,7 +31,7 @@ export default function AdminTeachers() {
 
       <div className="grid gap-3">
         {teachers.map(t => (
-          <div key={t.id} className="bg-white rounded-xl border border-gray-100 shadow-card p-4 flex items-center gap-4">
+          <div key={t.id} className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 flex items-center gap-4">
             <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-semibold text-sm flex-shrink-0">
               {t.first_name?.[0]}{t.last_name?.[0]}
             </div>

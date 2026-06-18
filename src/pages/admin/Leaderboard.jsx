@@ -55,7 +55,7 @@ export default function AdminLeaderboard() {
 
       <div className="space-y-2">
         {filtered.map((e, i) => (
-          <div key={e.anonymous_id} className={`bg-white rounded-xl border shadow-card p-3.5 flex items-center gap-3 ${i < 3 ? 'border-amber-100' : 'border-gray-100'}`}>
+          <div key={e.anonymous_id} className={`bg-white rounded-xl border shadow-sm p-3.5 flex items-center gap-3 ${i < 3 ? 'border-amber-100' : 'border-gray-200'}`}>
             <div className="w-8 text-center">
               {i < 3 ? <span className="text-lg">{medals[i]}</span> : <span className="text-sm font-semibold text-gray-400">#{i+1}</span>}
             </div>

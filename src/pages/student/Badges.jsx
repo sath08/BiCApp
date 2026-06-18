@@ -20,7 +20,7 @@ export default function Badges() {
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Earned</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {earned.map(b => (
-              <div key={b.id} className="bg-white rounded-xl border border-gray-100 shadow-card p-4 text-center">
+              <div key={b.id} className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 text-center">
                 <span className="text-3xl block mb-2">{b.emoji}</span>
                 <p className="text-sm font-semibold text-gray-900">{b.name}</p>
                 <p className="text-xs text-gray-400 mt-0.5">{b.description}</p>
@@ -36,7 +36,7 @@ export default function Badges() {
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Locked</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {locked.map(b => (
-              <div key={b.id} className="bg-white rounded-xl border border-gray-100 p-4 text-center opacity-50">
+              <div key={b.id} className="bg-white rounded-xl border border-gray-200 p-4 text-center opacity-50">
                 <span className="text-3xl block mb-2 grayscale">{b.emoji}</span>
                 <p className="text-sm font-semibold text-gray-700">{b.name}</p>
                 <p className="text-xs text-gray-400 mt-0.5">{b.description}</p>

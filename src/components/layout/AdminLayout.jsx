@@ -19,8 +19,8 @@ export default function AdminLayout() {
   async function handleLogout() { await signOut(); navigate('/') }
 
   return (
-    <div className="min-h-screen bg-[#F8F9FB] flex flex-col">
-      <header className="h-14 bg-white border-b border-gray-100 sticky top-0 z-30 flex items-center px-4">
+    <div className="min-h-screen bg-gray-100 flex flex-col">
+      <header className="h-14 bg-white border-b border-gray-200 sticky top-0 z-30 flex items-center px-4">
         <div className="flex items-center gap-3 flex-1">
           <span className="font-semibold text-gray-900 text-sm">BIC Champions</span>
           <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-xs font-medium">Admin</span>
@@ -34,11 +34,11 @@ export default function AdminLayout() {
         </div>
       </header>
       <div className="flex flex-1 min-h-0">
-        <aside className="hidden md:flex flex-col w-52 bg-white border-r border-gray-100 sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
+        <aside className="hidden md:flex flex-col w-52 bg-white border-r border-gray-200 sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
           <nav className="py-4 px-3 space-y-0.5">
             {navItems.map(item => (
               <NavLink key={item.to} to={item.to}
-                className={({ isActive }) => `flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-slate-100 text-slate-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
+                className={({ isActive }) => `flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-slate-200 text-slate-900' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'}`}
               >{item.label}</NavLink>
             ))}
           </nav>

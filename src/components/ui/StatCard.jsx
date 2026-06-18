@@ -11,7 +11,7 @@ const colorMap = {
 export default function StatCard({ emoji, label, value, sub, color = 'purple', index = 0 }) {
   const c = colorMap[color] || colorMap.purple
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-card p-4 flex items-center gap-3">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 flex items-center gap-3">
       <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg shrink-0 ${c.icon}`}>
         {emoji}
       </div>
