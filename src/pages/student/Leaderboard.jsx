@@ -26,7 +26,7 @@ export default function Leaderboard() {
   return (
     <div className="max-w-2xl space-y-5">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">Leaderboard</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Leaderboard</h1>
         <p className="text-sm text-gray-500 mt-0.5">Anonymous rankings — your identity is protected</p>
       </div>
 
@@ -50,21 +50,21 @@ export default function Leaderboard() {
         <div className="flex gap-1.5 flex-wrap">
           {CATEGORIES.map(c => (
             <button key={c} onClick={() => setCategory(c)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${category === c ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${category === c ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800'}`}
             >{c}</button>
           ))}
         </div>
         <div className="flex gap-1.5 flex-wrap">
           {GRADES.map(g => (
             <button key={g} onClick={() => setGradeFilter(g)}
-              className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${gradeFilter === g ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+              className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${gradeFilter === g ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800'}`}
             >{g === 'All' ? 'All grades' : g === '1-5' ? 'Gr. 1–5' : g === '6-8' ? 'Gr. 6–8' : `Gr. ${g}`}</button>
           ))}
         </div>
       </div>
 
       {/* Board */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm divide-y divide-gray-50">
+      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm divide-y divide-gray-100 dark:divide-gray-700 dark:divide-gray-700">
         {board.map((e, i) => {
           const isMe = e.anonymous_id === student?.anonymousId
           return (

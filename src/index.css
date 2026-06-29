@@ -4,10 +4,14 @@
 
 @layer base {
   body {
-    background-color: #F8F9FB;
+    @apply bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100;
     font-family: 'Inter', system-ui, sans-serif;
-    color: #111827;
     -webkit-font-smoothing: antialiased;
+  }
+
+  /* Focus visible ring — WCAG 2.4.7 */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-indigo-500 ring-offset-2 dark:ring-offset-gray-900;
   }
 }
 
@@ -21,8 +25,8 @@
 
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: #D1D5DB; }
+::-webkit-scrollbar-thumb { @apply bg-gray-300 dark:bg-gray-700; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { @apply bg-gray-400 dark:bg-gray-600; }
 
 @keyframes confetti-fall {
   0%   { transform: translateY(-100vh) rotate(0deg);   opacity: 1; }

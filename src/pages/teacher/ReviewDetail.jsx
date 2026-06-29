@@ -57,14 +57,14 @@ export default function ReviewDetail() {
       </div>
 
       <div>
-        <h1 className="text-xl font-bold text-gray-900">{review.book_title}</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">{review.book_title}</h1>
         <p className="text-sm text-gray-500 mt-0.5">{review.student_anonymous_id} · {review.essay_type} · {review.assignment_type}</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {/* Essay text */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+          <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">
             <p className="text-sm font-semibold text-gray-900 mb-3">Essay</p>
             <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700 leading-relaxed max-h-[500px] overflow-y-auto whitespace-pre-wrap">
               {review.essay_text}
@@ -73,11 +73,11 @@ export default function ReviewDetail() {
 
           {/* Review form */}
           <div className="space-y-4">
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">
               <RubricScorer control={control} errors={errors} />
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 space-y-4">
+            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4 space-y-4">
               <div>
                 <label className={labelCls}>Strengths</label>
                 <textarea {...register('strengths_text', { required: 'Required' })} rows={3}

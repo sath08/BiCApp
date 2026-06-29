@@ -32,7 +32,7 @@ export default function AdminStudents() {
     <div className="max-w-5xl space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Students</h1>
+          <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Students</h1>
           <p className="text-sm text-gray-500 mt-0.5">{students.length} registered</p>
         </div>
         <Button onClick={() => setShowAdd(true)} size="md">Add Student</Button>
@@ -41,7 +41,7 @@ export default function AdminStudents() {
       <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search students..."
         className={inputCls} />
 
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -51,16 +51,16 @@ export default function AdminStudents() {
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-700 dark:divide-gray-700">
               {filtered.map(s => {
                 const { current: level } = getRecognitionLevel(s.total_points)
                 return (
-                  <tr key={s.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={s.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-gray-900">{s.first_name} {s.last_name}</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-100">{s.first_name} {s.last_name}</p>
                       <p className="text-xs text-gray-400 font-mono">{s.anonymous_id}</p>
                     </td>
-                    <td className="px-4 py-3 text-gray-600">G{s.grade}</td>
+                    <td className="px-4 py-3 text-gray-600 dark:text-gray-300">G{s.grade}</td>
                     <td className="px-4 py-3 text-gray-600 text-xs">{s.school_name}</td>
                     <td className="px-4 py-3 font-semibold text-indigo-600">{s.total_points}</td>
                     <td className="px-4 py-3 text-gray-700">{level.emoji} {level.name}</td>

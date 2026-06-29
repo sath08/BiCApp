@@ -34,31 +34,31 @@ export default function Awards() {
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">Awards</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Awards</h1>
         <p className="text-sm text-gray-500 mt-0.5">Recognition levels and award-eligible students</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
         {DEFAULT_LEVELS.map(l => (
-          <div key={l.name} className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 text-center">
+          <div key={l.name} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4 text-center">
             <div className={`w-8 h-8 rounded-full ${l.color} mx-auto mb-2`} />
-            <p className="text-xs font-semibold text-gray-900">{l.name}</p>
+            <p className="text-xs font-semibold text-gray-900 dark:text-gray-100">{l.name}</p>
             <p className="text-xs text-gray-400 mt-0.5">{l.min}–{l.max === Infinity ? '∞' : l.max} pts</p>
           </div>
         ))}
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-        <div className="px-5 py-4 border-b border-gray-50">
-          <h2 className="text-sm font-semibold text-gray-900">Award-Eligible Students</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 dark:border-gray-700">
+          <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Award-Eligible Students</h2>
           <p className="text-xs text-gray-500 mt-0.5">{eligible.length} students with 100+ points</p>
         </div>
-        <div className="divide-y divide-gray-50">
+        <div className="divide-y divide-gray-100 dark:divide-gray-700 dark:divide-gray-700">
           {eligible.map((e, i) => (
             <div key={e.anonymous_id} className="px-5 py-3.5 flex items-center gap-3">
               <span className="text-xs text-gray-400 w-5">#{i+1}</span>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900">{e.realName}</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{e.realName}</p>
                 {e.grade && <p className="text-xs text-gray-400">Grade {e.grade}</p>}
               </div>
               <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${e.level.light}`}>{e.level.name}</span>

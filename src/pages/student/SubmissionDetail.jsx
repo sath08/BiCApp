@@ -35,7 +35,7 @@ export default function SubmissionDetail() {
     return (
       <div className="text-center py-12">
         <div className="text-5xl mb-3">📭</div>
-        <p className="text-gray-500">Essay not found.</p>
+        <p className="text-gray-500 dark:text-gray-400">Essay not found.</p>
         <Link to="/student/writing" className="text-purple-600 hover:text-purple-800 font-semibold mt-4 inline-block">← Back to Writing</Link>
       </div>
     )
@@ -93,7 +93,7 @@ export default function SubmissionDetail() {
             <div className="space-y-3">
               {CRITERIA.map(c => (
                 <div key={c.key} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">{c.emoji} {c.label}</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">{c.emoji} {c.label}</span>
                   <Stars score={review[c.key] || 0} />
                 </div>
               ))}

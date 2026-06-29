@@ -27,11 +27,11 @@ export default function ReadingLog() {
   return (
     <div className="max-w-2xl space-y-5">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">Reading Log</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Reading Log</h1>
         <p className="text-sm text-gray-500 mt-0.5">Log your daily reading session to earn points and keep your streak</p>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-5">
         <AnimatePresence>
           {success && (
             <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
@@ -75,15 +75,15 @@ export default function ReadingLog() {
 
       {/* History */}
       {logs.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-          <div className="px-4 py-3 border-b border-gray-50">
-            <p className="text-sm font-semibold text-gray-900">History</p>
+        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700 dark:border-gray-700">
+            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">History</p>
           </div>
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-gray-100 dark:divide-gray-700 dark:divide-gray-700">
             {logs.map(log => (
               <div key={log.id} className="flex items-center justify-between px-4 py-3">
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{log.book_title}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{log.book_title}</p>
                   <p className="text-xs text-gray-400">{log.author} · {new Date(log.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                 </div>
                 <div className="text-right">

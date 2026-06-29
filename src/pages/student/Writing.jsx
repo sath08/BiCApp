@@ -35,7 +35,7 @@ export default function Writing() {
     }
   })
 
-  const inputCls = 'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'
+  const inputCls = 'w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'
 
   if (mode === 'write') return (
     <div className="p-6 max-w-2xl mx-auto space-y-4">
@@ -44,7 +44,7 @@ export default function Writing() {
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
           Back
         </button>
-        <h1 className="text-xl font-bold text-gray-900">New Submission</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">New Submission</h1>
       </div>
 
       {writingAssignments.length > 0 && (
@@ -82,7 +82,7 @@ export default function Writing() {
     <div className="p-6 max-w-2xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Writing</h1>
+          <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Writing</h1>
           <p className="text-sm text-gray-500 mt-0.5">{submissions.length} submissions</p>
         </div>
         <Button variant="primary" size="sm" onClick={() => setMode('write')}>New Submission</Button>
@@ -95,13 +95,13 @@ export default function Writing() {
       )}
 
       {writingAssignments.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">
           <h2 className="text-sm font-semibold text-gray-900 mb-3">Active Prompts</h2>
           <div className="space-y-2">
             {writingAssignments.map(a => (
-              <div key={a.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+              <div key={a.id} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 dark:border-gray-700 last:border-0">
                 <div>
-                  <p className="text-sm text-gray-900">{a.title}</p>
+                  <p className="text-sm text-gray-900 dark:text-gray-100">{a.title}</p>
                   {a.description && <p className="text-xs text-gray-500 mt-0.5">{a.description}</p>}
                 </div>
                 <span className="text-xs font-medium text-indigo-600">{a.points_reward} pts</span>
@@ -119,10 +119,10 @@ export default function Writing() {
         )}
         {submissions.map(s => (
           <Link key={s.id} to={`/student/writing/${s.id}`}
-            className="block bg-white rounded-xl border border-gray-200 shadow-sm p-4 hover:shadow-md transition-shadow">
+            className="block bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4 hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <p className="text-sm font-semibold text-gray-900">{s.title}</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{s.title}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{new Date(s.created_at).toLocaleDateString()}</p>
                 <p className="text-xs text-gray-500 mt-1.5 line-clamp-2">{s.body}</p>
               </div>

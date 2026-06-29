@@ -12,20 +12,20 @@ export default function Reviews() {
   return (
     <div className="max-w-3xl space-y-5">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">Review Queue</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Review Queue</h1>
         <p className="text-sm text-gray-500 mt-0.5">{pending.length} essay{pending.length !== 1 ? 's' : ''} awaiting review</p>
       </div>
 
       <div className="space-y-3">
         {pending.map(r => (
-          <div key={r.id} className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+          <div key={r.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <p className="font-semibold text-gray-900 truncate">{r.book_title}</p>
                   <StatusBadge status={r.status} />
                 </div>
-                <p className="text-xs text-gray-500">{r.student_anonymous_id} · {r.essay_type} · {r.assignment_type}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">{r.student_anonymous_id} · {r.essay_type} · {r.assignment_type}</p>
                 <p className="text-xs text-gray-400 mt-0.5">Submitted {new Date(r.submitted_at).toLocaleDateString()}</p>
                 <p className="text-xs text-gray-500 mt-2 line-clamp-2 italic">"{r.essay_text?.substring(0, 120)}..."</p>
               </div>
@@ -38,7 +38,7 @@ export default function Reviews() {
         {pending.length === 0 && (
           <div className="text-center py-16 text-gray-400">
             <div className="text-4xl mb-3">✓</div>
-            <p className="font-semibold text-gray-600">All caught up</p>
+            <p className="font-semibold text-gray-600 dark:text-gray-300">All caught up</p>
             <p className="text-sm mt-1">No essays awaiting review</p>
           </div>
         )}

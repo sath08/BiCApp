@@ -12,7 +12,7 @@ export default function TeacherDashboard() {
   return (
     <div className="max-w-3xl space-y-5">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h1>
         <p className="text-sm text-gray-500 mt-0.5">Welcome back, {user?.full_name}</p>
       </div>
 
@@ -23,7 +23,7 @@ export default function TeacherDashboard() {
           { label: 'Pending reviews', value: pending.length, alert: pending.length > 3 },
           { label: 'Completed', value: completed.length },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 text-center">
+          <div key={s.label} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4 text-center">
             <p className={`text-2xl font-bold ${s.alert ? 'text-orange-500' : 'text-gray-900'}`}>{s.value}</p>
             <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
           </div>
@@ -32,12 +32,12 @@ export default function TeacherDashboard() {
 
       {/* Pending reviews */}
       {pending.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
-            <p className="text-sm font-semibold text-gray-900">Needs review</p>
+        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-700 dark:border-gray-700">
+            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Needs review</p>
             <Link to="/teacher/reviews" className="text-xs text-emerald-600 hover:underline">View all</Link>
           </div>
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-gray-100 dark:divide-gray-700 dark:divide-gray-700">
             {pending.slice(0, 5).map(r => (
               <div key={r.id} className="flex items-center justify-between px-4 py-3">
                 <div className="min-w-0 flex-1">
@@ -54,16 +54,16 @@ export default function TeacherDashboard() {
       )}
 
       {/* Students */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
-          <p className="text-sm font-semibold text-gray-900">My students</p>
+      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-700 dark:border-gray-700">
+          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">My students</p>
           <Link to="/teacher/students" className="text-xs text-emerald-600 hover:underline">View all</Link>
         </div>
-        <div className="divide-y divide-gray-50">
+        <div className="divide-y divide-gray-100 dark:divide-gray-700 dark:divide-gray-700">
           {students.slice(0, 6).map(s => (
             <div key={s.id} className="flex items-center justify-between px-4 py-3">
               <div>
-                <p className="text-sm font-medium text-gray-900">{s.first_name} {s.last_name}</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{s.first_name} {s.last_name}</p>
                 <p className="text-xs text-gray-400">Grade {s.grade} · {s.school_name}</p>
               </div>
               <span className="text-xs font-semibold text-indigo-600">{s.total_points} XP</span>

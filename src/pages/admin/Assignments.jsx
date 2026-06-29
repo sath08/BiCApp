@@ -23,14 +23,14 @@ export default function Assignments() {
 
   const shown = filter === 'all' ? assignments : assignments.filter(a => a.type === filter)
 
-  const inputCls = 'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'
+  const inputCls = 'w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent'
   const labelCls = 'block text-xs font-medium text-gray-600 mb-1'
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Assignments</h1>
+          <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Assignments</h1>
           <p className="text-sm text-gray-500 mt-0.5">{assignments.length} total</p>
         </div>
         <Button variant="primary" size="sm" onClick={() => setOpen(true)}>New Assignment</Button>
@@ -39,7 +39,7 @@ export default function Assignments() {
       <div className="flex gap-2 flex-wrap">
         {['all', ...TYPES].map(t => (
           <button key={t} onClick={() => setFilter(t)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${filter === t ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${filter === t ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800'}`}>
             {t === 'all' ? 'All' : TYPE_LABELS[t]}
           </button>
         ))}
@@ -48,18 +48,18 @@ export default function Assignments() {
       <div className="space-y-3">
         {shown.length === 0 && <p className="text-sm text-gray-400 text-center py-8">No assignments found.</p>}
         {shown.map(a => (
-          <div key={a.id} className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+          <div key={a.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">
             <div className="flex items-start gap-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${TYPE_COLOR[a.type] || 'bg-gray-100 text-gray-600'}`}>{TYPE_LABELS[a.type] || a.type}</span>
                   {a.grade && <span className="text-xs text-gray-400">Grade {a.grade}</span>}
                 </div>
-                <p className="text-sm font-semibold text-gray-900">{a.title}</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{a.title}</p>
                 {a.description && <p className="text-xs text-gray-500 mt-1 line-clamp-2">{a.description}</p>}
               </div>
               <div className="text-right flex-shrink-0">
-                {a.due_date && <p className="text-xs text-gray-500">Due {new Date(a.due_date).toLocaleDateString()}</p>}
+                {a.due_date && <p className="text-xs text-gray-500 dark:text-gray-400">Due {new Date(a.due_date).toLocaleDateString()}</p>}
                 <p className="text-xs font-medium text-indigo-600 mt-0.5">{a.points_reward ?? 0} pts</p>
               </div>
             </div>

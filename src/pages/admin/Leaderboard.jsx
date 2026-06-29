@@ -33,21 +33,21 @@ export default function AdminLeaderboard() {
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">Leaderboard</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Leaderboard</h1>
         <p className="text-sm text-gray-500 mt-0.5">Full rankings with student names (admin view)</p>
       </div>
 
       <div className="flex flex-wrap gap-2">
         {CATEGORIES.map(c => (
           <button key={c} onClick={() => setCategory(c)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors capitalize ${category === c ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors capitalize ${category === c ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800'}`}>
             {c}
           </button>
         ))}
         <div className="w-px bg-gray-200 mx-1" />
         {GRADES.map(g => (
           <button key={g} onClick={() => setGrade(g)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${grade === g ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${grade === g ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800'}`}>
             {g === 'all' ? 'All Grades' : `Gr ${g}`}
           </button>
         ))}
@@ -60,7 +60,7 @@ export default function AdminLeaderboard() {
               {i < 3 ? <span className="text-lg">{medals[i]}</span> : <span className="text-sm font-semibold text-gray-400">#{i+1}</span>}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-gray-900">{e.realName}</p>
+              <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{e.realName}</p>
               <p className="text-xs text-gray-400">{e.school || '—'} {e.grade ? `· Grade ${e.grade}` : ''}</p>
             </div>
             <div className="text-right">

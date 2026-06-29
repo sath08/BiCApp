@@ -24,7 +24,7 @@ export default function Landing() {
       {/* Nav */}
       <header className="bg-white border-b border-gray-200 h-14 flex items-center px-6">
         <div className="max-w-5xl mx-auto w-full flex items-center justify-between">
-          <span className="font-semibold text-gray-900">BIC Champions</span>
+          <span className="font-semibold text-gray-900 dark:text-gray-100">BIC Champions</span>
           <div className="flex items-center gap-3">
             <Link to="/login" className="text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors">Log in</Link>
             <Link to="/register" className="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors">Register</Link>
@@ -50,7 +50,7 @@ export default function Landing() {
               <Link to="/register" className="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-xl hover:bg-indigo-700 transition-colors text-sm">
                 Join the program
               </Link>
-              <Link to="/login" className="bg-white border border-gray-200 text-gray-700 font-semibold px-6 py-3 rounded-xl hover:bg-gray-50 transition-colors text-sm">
+              <Link to="/login" className="bg-white border border-gray-200 text-gray-700 font-semibold px-6 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm">
                 Already a member? Log in
               </Link>
             </div>
@@ -63,7 +63,7 @@ export default function Landing() {
         <div className="max-w-3xl mx-auto grid grid-cols-3 gap-6 text-center">
           {[['200+', 'Students enrolled'], ['5,000+', 'Books read'], ['1,200+', 'Essays written']].map(([v, l], i) => (
             <motion.div key={l} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.1 + 0.3 }}>
-              <p className="text-2xl font-bold text-gray-900">{v}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{v}</p>
               <p className="text-sm text-gray-500 mt-0.5">{l}</p>
             </motion.div>
           ))}
@@ -81,7 +81,7 @@ export default function Landing() {
             {features.map((f, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.07 }} viewport={{ once: true }}
-                className="bg-white rounded-xl border border-gray-200 p-5"
+                className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-5"
               >
                 <span className="text-2xl mb-3 block">{f.emoji}</span>
                 <h3 className="font-semibold text-gray-900 mb-1 text-sm">{f.title}</h3>
