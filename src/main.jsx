@@ -6,11 +6,8 @@ import { AuthProvider } from './contexts/AuthContext'
 import { StudentProvider } from './contexts/StudentContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { LanguageProvider } from './contexts/LanguageContext'
-import { initStore } from './lib/localStore'
 import App from './App'
 import './index.css'
-
-initStore()
 
 const queryClient = new QueryClient({
   defaultOptions: {

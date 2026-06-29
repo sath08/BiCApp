@@ -1,6 +1,6 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { useStudents, useTeachers, useProgramStats } from '../../hooks/useStudent'
-import { getRecognitionLevel } from '../../lib/localStore'
+import { getRecognitionLevel } from '../../lib/db'
 
 const monthlyData = [
   { month: 'Jan', students: 45, essays: 120 },

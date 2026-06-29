@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useStudentContext } from '../contexts/StudentContext'
 import { useAuth } from '../contexts/AuthContext'
 import { useLang } from '../contexts/LanguageContext'
+import { supabase } from '../lib/supabase'
 import Button from '../components/ui/Button'
 import HeaderControls from '../components/ui/HeaderControls'
 
@@ -31,8 +32,14 @@ export default function Login() {
   async function handleTeacherLogin(data) {
     setLoading(true); setError('')
     try {
-      const session = signIn(data.email, data.password)
-      navigate(session.role === 'coordinator' ? '/admin/dashboard' : '/teacher/dashboard')
+      const { data: authData } = await signIn(data.email, data.password)
+      const userId = authData?.user?.id
+      let role = 'teacher'
+      if (userId) {
+        const { data: t } = await supabase.from('teachers').select('role').eq('id', userId).single()
+        if (t) role = t.role
+      }
+      navigate(role === 'coordinator' ? '/admin/dashboard' : '/teacher/dashboard')
     } catch (e) { setError(e.message || 'Invalid credentials') }
     finally { setLoading(false) }
   }

@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useStudents, useDeactivateStudent } from '../../hooks/useStudent'
-import { getRecognitionLevel } from '../../lib/localStore'
+import { getRecognitionLevel } from '../../lib/db'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import { useForm } from 'react-hook-form'
-import { addStudent } from '../../lib/localStore'
+import { addStudent } from '../../lib/db'
 import { useQueryClient } from '@tanstack/react-query'
 
 export default function AdminStudents() {

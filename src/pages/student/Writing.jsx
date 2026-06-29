@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useStudentContext } from '../../contexts/StudentContext'
-import { getEssays, addEssay, getWritingAssignments } from '../../lib/localStore'
+import { getEssays, addEssay, getWritingAssignments } from '../../lib/db'
 import { Link } from 'react-router-dom'
 import Button from '../../components/ui/Button'
 

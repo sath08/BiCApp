@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getReadingLogs, addReadingLog as storeAddLog } from '../lib/localStore'
+import { getReadingLogs, addReadingLog } from '../lib/db'
 import { useStudentContext } from '../contexts/StudentContext'
 
 export function useReadingLogs(studentId) {
@@ -11,15 +11,14 @@ export function useReadingLogs(studentId) {
 }
 
 export function useAddReadingLog() {
-  const queryClient = useQueryClient()
+  const qc = useQueryClient()
   const { student } = useStudentContext()
   return useMutation({
-    mutationFn: (data) => storeAddLog(student.studentId, data, student.grade),
+    mutationFn: (data) => addReadingLog(student.studentId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['reading-logs'] })
-      queryClient.invalidateQueries({ queryKey: ['points'] })
-      queryClient.invalidateQueries({ queryKey: ['student'] })
-      queryClient.invalidateQueries({ queryKey: ['badges'] })
+      qc.invalidateQueries({ queryKey: ['reading-logs'] })
+      qc.invalidateQueries({ queryKey: ['points'] })
+      qc.invalidateQueries({ queryKey: ['student'] })
     },
   })
 }

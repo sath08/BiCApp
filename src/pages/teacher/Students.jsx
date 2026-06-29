@@ -1,6 +1,6 @@
 import { useAuth } from '../../contexts/AuthContext'
 import { useStudentsForTeacher } from '../../hooks/useStudent'
-import { getRecognitionLevel } from '../../lib/localStore'
+import { getRecognitionLevel } from '../../lib/db'
 
 export default function TeacherStudents() {
   const { user } = useAuth()

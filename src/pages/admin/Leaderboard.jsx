@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getLeaderboard, getStudents } from '../../lib/localStore'
+import { getLeaderboard, getStudents } from '../../lib/db'
 
 const CATEGORIES = ['overall', 'reading', 'writing']
 const GRADES = ['all', 3, 4, 5, 6, 7, 8]

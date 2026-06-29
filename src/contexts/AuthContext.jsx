@@ -1,7 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-import { findTeacherAccount } from '../lib/localStore'
-
-const SESSION_KEY = 'bic_staff_session'
+import { supabase } from '../lib/supabase'
 
 const AuthContext = createContext(null)
 
@@ -11,40 +9,55 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(SESSION_KEY)
-      if (raw) {
-        const session = JSON.parse(raw)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
         setUser(session.user)
-        setUserRole(session.role)
+        loadRole(session.user.id)
+      } else {
+        setLoading(false)
+      }
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        setUser(session.user)
+        loadRole(session.user.id)
+      } else {
+        setUser(null)
+        setUserRole(null)
+        setLoading(false)
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  async function loadRole(userId) {
+    try {
+      const { data } = await supabase
+        .from('teachers')
+        .select('role, first_name, last_name')
+        .eq('id', userId)
+        .single()
+      if (data) {
+        setUserRole(data.role)
+        setUser(u => ({ ...u, full_name: `${data.first_name} ${data.last_name}` }))
       }
     } catch { /* ignore */ }
     setLoading(false)
-  }, [])
-
-  function signIn(email, password) {
-    const account = findTeacherAccount(email, password)
-    if (!account) throw new Error('Invalid email or password.')
-    const session = { user: { id: account.id, email: account.email, full_name: account.full_name }, role: account.role }
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session))
-    setUser(session.user)
-    setUserRole(session.role)
-    return session
   }
 
-  function signOut() {
-    localStorage.removeItem(SESSION_KEY)
-    setUser(null)
-    setUserRole(null)
+  async function signIn(email, password) {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) throw new Error(error.message)
+    return data
   }
 
-  // Kept for backward compat with Login.jsx (no-op since signIn now handles it)
-  function mockTeacherLogin(role = 'teacher') {
-    const email = role === 'coordinator' ? 'admin@bic.edu' : 'rodriguez@bic.edu'
-    signIn(email, 'password')
+  async function signOut() {
+    await supabase.auth.signOut()
   }
 
-  const value = { user, userRole, loading, signIn, signOut, mockTeacherLogin }
+  const value = { user, userRole, loading, signIn, signOut }
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 

@@ -1,7 +1,7 @@
 import { useStudentContext } from '../../contexts/StudentContext'
 import { useStudent, useBadges } from '../../hooks/useStudent'
 import { usePoints } from '../../hooks/usePoints'
-import { getRecognitionLevel } from '../../lib/localStore'
+import { getRecognitionLevel } from '../../lib/db'
 import { useNavigate } from 'react-router-dom'
 import Button from '../../components/ui/Button'
 

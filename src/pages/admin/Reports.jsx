@@ -1,9 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getStudents, getReadingLogs, getAllEssays } from '../../lib/localStore'
-
-function getAllPoints() {
-  try { return JSON.parse(localStorage.getItem('bic_points') || '[]') } catch { return [] }
-}
+import { getStudents, getReadingLogs, getAllEssays, getAllPoints } from '../../lib/db'
 
 function StatRow({ label, value }) {
   return (

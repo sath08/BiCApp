@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getPoints, awardBonusPoints } from '../lib/localStore'
+import { getPoints, awardBonusPoints } from '../lib/db'
 
 export function usePoints(studentId) {
   return useQuery({
@@ -10,13 +10,13 @@ export function usePoints(studentId) {
 }
 
 export function useAwardBonusPoints() {
-  const queryClient = useQueryClient()
+  const qc = useQueryClient()
   return useMutation({
     mutationFn: ({ studentId, points, description, teacherName }) =>
       awardBonusPoints(studentId, points, description, teacherName),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['points'] })
-      queryClient.invalidateQueries({ queryKey: ['student'] })
+      qc.invalidateQueries({ queryKey: ['points'] })
+      qc.invalidateQueries({ queryKey: ['students'] })
     },
   })
 }

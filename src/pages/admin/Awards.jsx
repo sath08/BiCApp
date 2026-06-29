@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getLeaderboard, getStudents } from '../../lib/localStore'
+import { getLeaderboard, getStudents } from '../../lib/db'
 import { useState } from 'react'
 import Button from '../../components/ui/Button'
 

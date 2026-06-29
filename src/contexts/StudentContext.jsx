@@ -1,37 +1,51 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-import { getStudentSession, setStudentSession, clearStudentSession } from '../lib/auth'
-import { findStudentByLogin } from '../lib/localStore'
+import { supabase } from '../lib/supabase'
 
 const StudentContext = createContext(null)
+const SESSION_KEY = 'bic_student_session'
 
 export function StudentProvider({ children }) {
   const [student, setStudent] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const session = getStudentSession()
-    if (session) setStudent(session)
+    try {
+      const raw = sessionStorage.getItem(SESSION_KEY)
+      if (raw) setStudent(JSON.parse(raw))
+    } catch { /* ignore */ }
     setLoading(false)
   }, [])
 
-  function loginStudent(firstName, lastName, birthYear) {
-    const found = findStudentByLogin(firstName, lastName, birthYear)
-    if (!found) throw new Error('Student not found. Please check your name and birth year.')
+  async function loginStudent(firstName, lastName, birthYear) {
+    const { data, error } = await supabase
+      .from('students')
+      .select('*')
+      .ilike('first_name', firstName.trim())
+      .ilike('last_name', lastName.trim())
+      .eq('birth_year', parseInt(birthYear))
+      .eq('is_active', true)
+      .maybeSingle()
+
+    if (error) throw new Error(error.message)
+    if (!data) throw new Error('Student not found. Please check your name and birth year.')
+
     const session = {
-      studentId: found.id,
-      firstName: found.first_name,
-      lastName: found.last_name,
-      grade: found.grade,
-      anonymousId: found.anonymous_id,
-      school: found.school_name,
+      studentId: data.id,
+      firstName: data.first_name,
+      lastName: data.last_name,
+      grade: data.grade,
+      anonymousId: data.anonymous_id,
+      school: data.school_name,
+      totalPoints: data.total_points,
+      readingStreak: data.reading_streak,
     }
-    setStudentSession(found)
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session))
     setStudent(session)
     return session
   }
 
   function logoutStudent() {
-    clearStudentSession()
+    sessionStorage.removeItem(SESSION_KEY)
     setStudent(null)
   }
 
