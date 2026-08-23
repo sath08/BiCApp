@@ -37,7 +37,7 @@ export default function ReadingLog() {
         onClose={() => setCelebration(null)}
       />
 
-      <div className="bg-gradient-to-r from-teal-700 to-teal-500 rounded-2xl p-5 text-white">
+      <div className="bg-gradient-to-r from-teal-700 to-teal-600 rounded-2xl p-5 text-white">
         <h1 className="text-2xl font-extrabold mb-1">📖 Reading Log</h1>
         <p className="text-teal-100 text-sm">Track your reading sessions and earn points!</p>
       </div>
@@ -61,7 +61,7 @@ export default function ReadingLog() {
       <Card>
         <h2 className="font-bold text-purple-900 mb-4">📋 Reading History</h2>
         {logs.length === 0 ? (
-          <div className="text-center py-8 text-gray-400">
+          <div className="text-center py-8 text-gray-600">
             <div className="text-5xl mb-3">📭</div>
             <p>No reading logs yet. Start by logging your first session!</p>
           </div>
@@ -76,19 +76,19 @@ export default function ReadingLog() {
                 className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-purple-50 transition-colors"
               >
                 <div className="text-center min-w-[52px]">
-                  <div className="text-xs text-gray-400 font-medium">
+                  <div className="text-xs text-gray-600 font-medium">
                     {new Date(log.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   </div>
                 </div>
                 <div className="flex-1">
                   <p className="font-semibold text-gray-800 text-sm">{log.book_title}</p>
-                  <p className="text-xs text-gray-500">{log.author}</p>
-                  {log.notes && <p className="text-xs text-gray-400 mt-1 italic">"{log.notes}"</p>}
+                  <p className="text-xs text-gray-600">{log.author}</p>
+                  {log.notes && <p className="text-xs text-gray-600 mt-1 italic">"{log.notes}"</p>}
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-purple-700">{log.minutes_read}<span className="font-normal text-gray-400 text-xs">min</span></p>
+                  <p className="font-bold text-purple-700">{log.minutes_read}<span className="font-normal text-gray-600 text-xs">min</span></p>
                   {log.points_earned > 0 && (
-                    <span className="text-xs font-bold text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded-full">+{log.points_earned}pt ⭐</span>
+                    <span className="text-xs font-bold text-yellow-800 bg-yellow-50 px-2 py-0.5 rounded-full">+{log.points_earned}pt ⭐</span>
                   )}
                 </div>
               </motion.div>

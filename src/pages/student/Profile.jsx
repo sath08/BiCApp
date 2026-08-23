@@ -26,8 +26,8 @@ export default function Profile() {
           {student?.firstName?.[0]}{student?.lastName?.[0]}
         </div>
         <h1 className="text-2xl font-extrabold">{student?.firstName} {student?.lastName}</h1>
-        <p className="text-purple-300 text-sm">Grade {student?.grade} • {student?.school}</p>
-        <p className="text-purple-400 text-xs mt-1">{student?.anonymousId}</p>
+        <p className="text-white/90 text-sm">Grade {student?.grade} • {student?.school}</p>
+        <p className="text-white/80 text-xs mt-1">{student?.anonymousId}</p>
         <div className="flex justify-center gap-2 mt-4">
           <span className="bg-white/20 px-4 py-1.5 rounded-full text-sm font-bold">{level.emoji} {level.name}</span>
         </div>
@@ -36,15 +36,15 @@ export default function Profile() {
       <div className="grid grid-cols-3 gap-3">
         <Card className="text-center p-4">
           <div className="text-2xl font-extrabold text-purple-700">{totalPoints}</div>
-          <div className="text-xs text-gray-500 mt-1">Total XP</div>
+          <div className="text-xs text-gray-600 mt-1">Total XP</div>
         </Card>
         <Card className="text-center p-4">
-          <div className="text-2xl font-extrabold text-orange-500">{streak}🔥</div>
-          <div className="text-xs text-gray-500 mt-1">Day Streak</div>
+          <div className="text-2xl font-extrabold text-orange-700">{streak}🔥</div>
+          <div className="text-xs text-gray-600 mt-1">Day Streak</div>
         </Card>
         <Card className="text-center p-4">
           <div className="text-2xl font-extrabold text-teal-600">{badges.length}</div>
-          <div className="text-xs text-gray-500 mt-1">Badges</div>
+          <div className="text-xs text-gray-600 mt-1">Badges</div>
         </Card>
       </div>
 
@@ -58,7 +58,7 @@ export default function Profile() {
             { label: 'Anonymous ID', value: student?.anonymousId },
           ].map(item => (
             <div key={item.label} className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
-              <span className="text-sm text-gray-500 font-medium">{item.label}</span>
+              <span className="text-sm text-gray-600 font-medium">{item.label}</span>
               <span className="text-sm font-semibold text-gray-800">{item.value}</span>
             </div>
           ))}
@@ -75,20 +75,20 @@ export default function Profile() {
             >
               <div>
                 <p className="text-sm font-medium text-gray-700">{p.description}</p>
-                {p.awarded_by && <p className="text-xs text-gray-400">By {p.awarded_by}</p>}
-                <p className="text-xs text-gray-400">{new Date(p.created_at).toLocaleDateString()}</p>
+                {p.awarded_by && <p className="text-xs text-gray-600">By {p.awarded_by}</p>}
+                <p className="text-xs text-gray-600">{new Date(p.created_at).toLocaleDateString()}</p>
               </div>
               <span className="font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full text-sm">+{p.points} ⭐</span>
             </motion.div>
           ))}
           {(!pointsData?.ledger || pointsData.ledger.length === 0) && (
-            <p className="text-sm text-gray-400 text-center py-4">No points yet. Start reading! 📖</p>
+            <p className="text-sm text-gray-600 text-center py-4">No points yet. Start reading! 📖</p>
           )}
         </div>
       </Card>
 
       <button onClick={logoutStudent}
-        className="w-full bg-red-50 text-red-600 font-bold py-3 rounded-xl border border-red-200 hover:bg-red-100 transition-colors"
+        className="w-full bg-red-50 text-red-700 font-bold py-3 rounded-xl border border-red-200 hover:bg-red-100 transition-colors"
       >
         🚪 Log Out
       </button>

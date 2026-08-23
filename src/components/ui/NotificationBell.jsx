@@ -54,7 +54,7 @@ export default function NotificationBell() {
               </div>
               <div className="max-h-80 overflow-y-auto divide-y divide-gray-50">
                 {notifications.length === 0 ? (
-                  <p className="p-4 text-center text-gray-400 text-sm">No notifications</p>
+                  <p className="p-4 text-center text-gray-600 text-sm">No notifications</p>
                 ) : (
                   notifications.map(n => (
                     <div
@@ -67,7 +67,7 @@ export default function NotificationBell() {
                         <div className={!n.is_read ? '' : 'pl-4'}>
                           <p className="text-sm font-semibold text-gray-800">{n.title}</p>
                           <p className="text-xs text-gray-500 mt-0.5">{n.message}</p>
-                          <p className="text-xs text-gray-400 mt-1">{new Date(n.created_at).toLocaleDateString()}</p>
+                          <p className="text-xs text-gray-600 mt-1">{new Date(n.created_at).toLocaleDateString()}</p>
                         </div>
                       </div>
                     </div>

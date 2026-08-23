@@ -27,7 +27,7 @@ export default function ReviewDetail() {
   if (!review) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Essay not found.</p>
+        <p className="text-gray-600">Essay not found.</p>
         <Link to="/teacher/reviews" className="text-teal-600 font-semibold mt-4 inline-block">← Back to Reviews</Link>
       </div>
     )
@@ -53,7 +53,7 @@ export default function ReviewDetail() {
         ← Back to Reviews
       </Link>
 
-      <div className="bg-gradient-to-r from-teal-700 to-teal-500 rounded-2xl p-5 text-white">
+      <div className="bg-gradient-to-r from-teal-700 to-teal-600 rounded-2xl p-5 text-white">
         <h1 className="text-xl font-extrabold">{review.book_title}</h1>
         <p className="text-teal-100 text-sm">
           {review.student_anonymous_id} • {review.essay_type} • {review.assignment_type}
@@ -85,7 +85,7 @@ export default function ReviewDetail() {
                   placeholder="What did the student do well?"
                   className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none resize-none"
                 />
-                {errors.strengths_text && <p className="text-red-500 text-xs mt-1">{errors.strengths_text.message}</p>}
+                {errors.strengths_text && <p className="text-red-700 text-xs mt-1">{errors.strengths_text.message}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">📈 Areas for Growth</label>
@@ -95,7 +95,7 @@ export default function ReviewDetail() {
                   placeholder="What can the student improve?"
                   className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none resize-none"
                 />
-                {errors.growth_areas_text && <p className="text-red-500 text-xs mt-1">{errors.growth_areas_text.message}</p>}
+                {errors.growth_areas_text && <p className="text-red-700 text-xs mt-1">{errors.growth_areas_text.message}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">💬 General Feedback (Optional)</label>

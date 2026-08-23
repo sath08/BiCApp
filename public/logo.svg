@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 340" role="img" aria-labelledby="bicLogoTitle">
+  <title id="bicLogoTitle">Best in Class Education Center</title>
+
+  <!-- Person silhouette -->
+  <circle cx="160" cy="70" r="34" fill="#1D4E89" />
+  <path
+    d="M96 172
+       C96 122 122 96 160 96
+       C198 96 224 122 224 172
+       L224 178
+       C224 184 219 188 213 188
+       L107 188
+       C101 188 96 184 96 178
+       Z"
+    fill="#1D4E89"
+  />
+
+  <!-- Open book -->
+  <g fill="none" stroke="#1B6B34" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M160 156 L160 208" />
+    <path d="M160 156 C138 140 108 138 84 146 L84 200 C108 192 138 194 160 208" />
+    <path d="M160 156 C182 140 212 138 236 146 L236 200 C212 192 182 194 160 208" />
+  </g>
+
+  <!-- Wordmark -->
+  <text x="160" y="248" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="40" fill="#163D6D">
+    Best <tspan fill="#1B6B34">in</tspan> Class
+  </text>
+
+  <!-- Banner -->
+  <rect x="20" y="268" width="280" height="46" rx="6" fill="#1B6B34" />
+  <text x="160" y="298" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="22" letter-spacing="1" fill="#FFFFFF">
+    EDUCATION CENTER
+  </text>
+</svg>

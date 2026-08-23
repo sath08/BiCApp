@@ -20,10 +20,10 @@ export default function AdminTeachers() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-orange-600 to-orange-400 rounded-2xl p-5 text-white flex items-center justify-between">
+      <div className="bg-gradient-to-r from-orange-700 to-orange-600 rounded-2xl p-5 text-white flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-extrabold mb-1">👩‍🏫 Teacher Management</h1>
-          <p className="text-orange-100 text-sm">{teachers.length} teachers</p>
+          <p className="text-white/90 text-sm">{teachers.length} teachers</p>
         </div>
         <Button variant="yellow" onClick={() => setShowAdd(true)}>+ Add Teacher</Button>
       </div>

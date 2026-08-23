@@ -1,14 +1,17 @@
 import { motion } from 'framer-motion'
 
 export default function StatCard({ emoji, label, value, sub, color = 'purple', index = 0 }) {
+  // Gradient text stops must each independently meet 3:1 against the white
+  // card background (large, bold numerals qualify for the "large text"
+  // threshold), so every stop here is a 600+ shade.
   const colors = {
-    purple: 'from-purple-600 to-purple-400',
-    orange: 'from-orange-500 to-orange-400',
-    teal: 'from-teal-600 to-teal-400',
-    yellow: 'from-yellow-500 to-yellow-400',
-    green: 'from-green-600 to-green-400',
-    blue: 'from-blue-600 to-blue-400',
-    red: 'from-red-500 to-red-400',
+    purple: 'from-purple-700 to-purple-500',
+    orange: 'from-orange-700 to-orange-600',
+    teal: 'from-teal-700 to-teal-600',
+    yellow: 'from-yellow-800 to-yellow-700',
+    green: 'from-green-700 to-green-600',
+    blue: 'from-blue-700 to-blue-600',
+    red: 'from-red-700 to-red-600',
   }
   const bgs = {
     purple: 'bg-purple-50',
@@ -32,11 +35,11 @@ export default function StatCard({ emoji, label, value, sub, color = 'purple', i
         {emoji}
       </div>
       <div className="flex-1">
-        <p className="text-sm text-gray-500 font-medium">{label}</p>
+        <p className="text-sm text-gray-600 font-medium">{label}</p>
         <p className={`text-2xl font-extrabold bg-gradient-to-r ${colors[color]} bg-clip-text text-transparent`}>
           {value}
         </p>
-        {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
+        {sub && <p className="text-xs text-gray-600 mt-0.5">{sub}</p>}
       </div>
     </motion.div>
   )

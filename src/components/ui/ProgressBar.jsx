@@ -6,7 +6,7 @@ export default function ProgressBar({ value, max = 100, color = 'purple', label,
   const colors = {
     purple: 'bg-gradient-to-r from-purple-600 to-purple-400',
     orange: 'bg-gradient-to-r from-orange-500 to-orange-300',
-    teal: 'bg-gradient-to-r from-teal-600 to-teal-400',
+    teal: 'bg-gradient-to-r from-teal-700 to-teal-500',
     yellow: 'bg-gradient-to-r from-yellow-500 to-yellow-300',
     green: 'bg-gradient-to-r from-green-600 to-green-400',
   }

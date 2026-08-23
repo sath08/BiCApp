@@ -5,7 +5,7 @@ export default function Navbar() {
     <nav className="bg-white border-b border-purple-100 sticky top-0 z-30 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <span className="text-2xl">📚</span>
+          <img src="/logo.svg" alt="Best in Class Education Center" className="h-10 w-auto" />
           <span className="font-extrabold text-purple-800 text-lg hidden sm:block">BIC Champions</span>
         </Link>
         <div className="flex gap-3">

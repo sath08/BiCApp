@@ -20,15 +20,15 @@
   }
 
   .gradient-orange {
-    @apply bg-gradient-to-r from-orange-500 to-orange-400;
+    @apply bg-gradient-to-r from-orange-800 to-orange-700;
   }
 
   .gradient-teal {
-    @apply bg-gradient-to-r from-teal-600 to-teal-400;
+    @apply bg-gradient-to-r from-teal-800 to-teal-600;
   }
 
   .card-shadow {
-    box-shadow: 0 4px 20px rgba(107, 33, 168, 0.08);
+    box-shadow: 0 4px 20px rgba(29, 78, 137, 0.1);
   }
 
   .card-hover {

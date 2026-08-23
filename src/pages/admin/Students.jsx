@@ -32,16 +32,16 @@ export default function AdminStudents() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-orange-600 to-orange-400 rounded-2xl p-5 text-white flex items-center justify-between">
+      <div className="bg-gradient-to-r from-orange-700 to-orange-600 rounded-2xl p-5 text-white flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-extrabold mb-1">👨‍🎓 Student Management</h1>
-          <p className="text-orange-100 text-sm">{students.length} registered students</p>
+          <p className="text-white/90 text-sm">{students.length} registered students</p>
         </div>
         <Button variant="yellow" onClick={() => setShowAdd(true)}>+ Add Student</Button>
       </div>
 
       <div className="relative">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600">🔍</span>
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search students..."
           className="w-full bg-white border border-purple-200 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none shadow-sm"
         />
@@ -53,7 +53,7 @@ export default function AdminStudents() {
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
                 {['Student', 'Grade', 'School', 'Points', 'Level', 'Status', 'Actions'].map(h => (
-                  <th key={h} className="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">{h}</th>
+                  <th key={h} className="text-left px-4 py-3 text-xs font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -66,7 +66,7 @@ export default function AdminStudents() {
                   >
                     <td className="px-4 py-3">
                       <p className="font-semibold text-sm text-gray-800">{s.first_name} {s.last_name}</p>
-                      <p className="text-xs text-gray-400">{s.anonymous_id}</p>
+                      <p className="text-xs text-gray-600">{s.anonymous_id}</p>
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-600">G{s.grade}</td>
                     <td className="px-4 py-3 text-sm text-gray-600">{s.school_name}</td>
@@ -81,7 +81,7 @@ export default function AdminStudents() {
                       <div className="flex gap-2">
                         {s.is_active && (
                           <button onClick={() => deactivate.mutate(s.id)}
-                            className="text-xs text-red-500 hover:text-red-700 font-semibold"
+                            className="text-xs text-red-700 hover:text-red-800 font-semibold"
                           >Deactivate</button>
                         )}
                       </div>

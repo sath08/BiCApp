@@ -38,9 +38,9 @@ export default function Landing() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 200 }}
-            className="text-7xl mb-4"
+            className="mb-4 flex justify-center"
           >
-            📚
+            <img src="/logo.svg" alt="Best in Class Education Center" className="h-28 w-auto drop-shadow-xl rounded-2xl bg-white/95 p-2" />
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
@@ -49,13 +49,13 @@ export default function Landing() {
             className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 leading-tight"
           >
             Bellevue Reading &<br />
-            <span className="text-orange-300">Writing Champions</span>
+            <span className="text-teal-200">Writing Champions</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="text-lg text-purple-200 mb-10 max-w-xl mx-auto"
+            className="text-lg text-white mb-10 max-w-xl mx-auto"
           >
             Build your reading streak, earn badges, and become a champion reader and writer this summer! 🌟
           </motion.p>
@@ -67,7 +67,7 @@ export default function Landing() {
           >
             <Link
               to="/register"
-              className="bg-gradient-to-r from-orange-500 to-orange-400 text-white font-bold px-8 py-4 rounded-2xl text-lg shadow-xl hover:from-orange-600 hover:to-orange-500 transition-all hover:scale-105"
+              className="bg-gradient-to-r from-orange-700 to-orange-600 text-white font-bold px-8 py-4 rounded-2xl text-lg shadow-xl hover:from-orange-800 hover:to-orange-700 transition-all hover:scale-105"
             >
               🚀 Join the Program!
             </Link>
@@ -92,7 +92,7 @@ export default function Landing() {
             <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 + 0.8 }}>
               <div className="text-3xl mb-1">{s.emoji}</div>
               <div className="text-2xl font-extrabold text-purple-800">{s.value}</div>
-              <div className="text-sm text-gray-500">{s.label}</div>
+              <div className="text-sm text-gray-600">{s.label}</div>
             </motion.div>
           ))}
         </div>
@@ -102,7 +102,7 @@ export default function Landing() {
       <section className="py-16 px-4">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-extrabold text-purple-900 text-center mb-2">Why Students Love BIC 💜</h2>
-          <p className="text-gray-500 text-center mb-10">A fun, gamified learning experience</p>
+          <p className="text-gray-600 text-center mb-10">A fun, gamified learning experience</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {features.map((f, i) => (
               <motion.div
@@ -115,7 +115,7 @@ export default function Landing() {
               >
                 <div className="text-4xl mb-3">{f.emoji}</div>
                 <h3 className="font-bold text-purple-900 mb-1">{f.title}</h3>
-                <p className="text-sm text-gray-500">{f.desc}</p>
+                <p className="text-sm text-gray-600">{f.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -126,7 +126,7 @@ export default function Landing() {
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-extrabold text-purple-900 text-center mb-2">Recognition Levels 🎖️</h2>
-          <p className="text-gray-500 text-center mb-10">Earn points and unlock prestigious titles</p>
+          <p className="text-gray-600 text-center mb-10">Earn points and unlock prestigious titles</p>
           <div className="space-y-3">
             {levels.map((l, i) => (
               <motion.div
@@ -162,7 +162,7 @@ export default function Landing() {
           <p className="text-purple-200 mb-8 text-lg">Join hundreds of students building their reading and writing skills!</p>
           <Link
             to="/register"
-            className="inline-block bg-gradient-to-r from-orange-500 to-orange-400 text-white font-bold px-10 py-4 rounded-2xl text-lg shadow-xl hover:from-orange-600 hover:to-orange-500 transition-all hover:scale-105"
+            className="inline-block bg-gradient-to-r from-orange-700 to-orange-600 text-white font-bold px-10 py-4 rounded-2xl text-lg shadow-xl hover:from-orange-800 hover:to-orange-700 transition-all hover:scale-105"
           >
             🚀 Start Your Journey Today!
           </Link>

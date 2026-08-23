@@ -19,10 +19,10 @@ export default function StreakFlame({ streak = 0, size = 'md' }) {
       >
         🔥
       </motion.div>
-      <span className={`font-extrabold ${sizes[size].num} ${isActive ? 'text-orange-500' : 'text-gray-300'}`}>
+      <span className={`font-extrabold ${sizes[size].num} ${isActive ? 'text-orange-700' : 'text-gray-600'}`}>
         {streak}
       </span>
-      <span className={`${sizes[size].label} font-semibold ${isActive ? 'text-orange-400' : 'text-gray-300'}`}>
+      <span className={`${sizes[size].label} font-semibold ${isActive ? 'text-orange-700' : 'text-gray-600'}`}>
         day streak
       </span>
     </div>

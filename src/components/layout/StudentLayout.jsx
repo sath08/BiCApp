@@ -31,7 +31,7 @@ export default function StudentLayout() {
             <button className="md:hidden p-2 rounded-lg hover:bg-purple-50" onClick={() => setMobileOpen(!mobileOpen)}>
               <span className="text-xl">☰</span>
             </button>
-            <span className="text-xl">📚</span>
+            <img src="/logo.svg" alt="Best in Class Education Center" className="h-9 w-auto" />
             <span className="font-extrabold text-purple-800 hidden sm:block">BIC Champions</span>
           </div>
           <div className="flex items-center gap-2">
@@ -41,7 +41,7 @@ export default function StudentLayout() {
             <NotificationBell />
             <button
               onClick={handleLogout}
-              className="text-sm text-gray-500 hover:text-red-500 px-3 py-1.5 rounded-xl hover:bg-red-50 transition-colors font-medium"
+              className="text-sm text-gray-600 hover:text-red-700 px-3 py-1.5 rounded-xl hover:bg-red-50 transition-colors font-medium"
             >
               Logout
             </button>
@@ -73,8 +73,8 @@ export default function StudentLayout() {
           <div className="p-3 border-t border-purple-50">
             <div className="bg-purple-50 rounded-xl p-3 text-center">
               <div className="text-2xl mb-1">🔥</div>
-              <div className="text-xl font-extrabold text-orange-500">{student?.readingStreak || 5}</div>
-              <div className="text-xs text-gray-500">day streak</div>
+              <div className="text-xl font-extrabold text-orange-700">{student?.readingStreak || 5}</div>
+              <div className="text-xs text-gray-600">day streak</div>
             </div>
           </div>
         </aside>
@@ -85,7 +85,7 @@ export default function StudentLayout() {
             <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
             <div className="absolute left-0 top-0 bottom-0 w-64 bg-white shadow-xl p-4">
               <div className="flex items-center gap-2 mb-6">
-                <span className="text-2xl">📚</span>
+                <img src="/logo.svg" alt="Best in Class Education Center" className="h-9 w-auto" />
                 <span className="font-extrabold text-purple-800">BIC Champions</span>
               </div>
               {navItems.map(item => (
@@ -124,7 +124,7 @@ export default function StudentLayout() {
               to={item.to}
               className={({ isActive }) =>
                 `flex-1 flex flex-col items-center py-2 text-[10px] font-semibold transition-all ${
-                  isActive ? 'text-purple-700' : 'text-gray-400'
+                  isActive ? 'text-purple-700' : 'text-gray-600'
                 }`
               }
             >

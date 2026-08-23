@@ -2,12 +2,12 @@ import { motion } from 'framer-motion'
 
 const variants = {
   primary: 'bg-gradient-to-r from-purple-700 to-purple-500 text-white hover:from-purple-800 hover:to-purple-600 shadow-lg shadow-purple-200',
-  secondary: 'bg-gradient-to-r from-orange-500 to-orange-400 text-white hover:from-orange-600 hover:to-orange-500 shadow-lg shadow-orange-200',
-  teal: 'bg-gradient-to-r from-teal-600 to-teal-400 text-white hover:from-teal-700 hover:to-teal-500 shadow-lg shadow-teal-200',
+  secondary: 'bg-gradient-to-r from-orange-700 to-orange-600 text-white hover:from-orange-800 hover:to-orange-700 shadow-lg shadow-orange-200',
+  teal: 'bg-gradient-to-r from-teal-700 to-teal-600 text-white hover:from-teal-800 hover:to-teal-700 shadow-lg shadow-teal-200',
   outline: 'border-2 border-purple-600 text-purple-700 hover:bg-purple-50 bg-white',
   ghost: 'text-purple-700 hover:bg-purple-50',
-  danger: 'bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-700 hover:to-red-600 shadow-lg shadow-red-200',
-  yellow: 'bg-gradient-to-r from-yellow-500 to-yellow-400 text-white hover:from-yellow-600 hover:to-yellow-500 shadow-lg shadow-yellow-200',
+  danger: 'bg-gradient-to-r from-red-700 to-red-600 text-white hover:from-red-800 hover:to-red-700 shadow-lg shadow-red-200',
+  yellow: 'bg-gradient-to-r from-yellow-800 to-yellow-700 text-white hover:from-yellow-900 hover:to-yellow-800 shadow-lg shadow-yellow-200',
 }
 
 const sizes = {

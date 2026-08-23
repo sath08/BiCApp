@@ -7,22 +7,54 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Brand blue, derived from the Best in Class logo. Every shade from
+        // 600 up is >= 4.5:1 against white (600 = 8.4:1) so it's safe for
+        // body text; 500-900 are all safe as a background under white text.
+        purple: {
+          50: '#EFF5FC',
+          100: '#DCEAF7',
+          200: '#B9D5EF',
+          300: '#8DB9E3',
+          400: '#5A93CE',
+          500: '#2E6DB4',
+          600: '#1D4E89',
+          700: '#163D6D',
+          800: '#102C50',
+          900: '#0B1E38',
+          950: '#071527',
+        },
+        // Brand green, derived from the logo's open-book / banner green.
+        // 600 up is >= 4.5:1 against white; use 600+ (not 500) as a
+        // background under white text.
+        teal: {
+          50: '#EFF8F1',
+          100: '#DCEFE0',
+          200: '#B7DFC1',
+          300: '#8CC99C',
+          400: '#57AD6C',
+          500: '#2F9E52',
+          600: '#1B6B34',
+          700: '#155429',
+          800: '#0F3D1E',
+          900: '#0A2814',
+          950: '#06190C',
+        },
         primary: {
-          DEFAULT: '#6B21A8',
-          light: '#9333EA',
-          dark: '#4C1D95',
+          DEFAULT: '#1D4E89',
+          light: '#2E6DB4',
+          dark: '#163D6D',
         },
         secondary: {
-          DEFAULT: '#F97316',
-          light: '#FB923C',
-          dark: '#EA580C',
+          DEFAULT: '#1B6B34',
+          light: '#2F9E52',
+          dark: '#155429',
         },
         accent: {
-          teal: '#0D9488',
-          yellow: '#EAB308',
+          teal: '#1B6B34',
+          yellow: '#854D0E',
         },
         bg: {
-          lavender: '#FAF5FF',
+          lavender: '#F3F8FC',
         },
       },
       fontFamily: {

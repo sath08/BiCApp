@@ -37,7 +37,7 @@ export default function Register() {
         >
           <div className="text-7xl mb-4">🎉</div>
           <h2 className="text-2xl font-extrabold text-purple-900 mb-3">Registration Complete!</h2>
-          <p className="text-gray-500 mb-6">Welcome to Bellevue Reading & Writing Champions! Your account is being reviewed by our coordinators.</p>
+          <p className="text-gray-600 mb-6">Welcome to Bellevue Reading & Writing Champions! Your account is being reviewed by our coordinators.</p>
           <Link to="/login" className="inline-block bg-gradient-to-r from-purple-700 to-purple-500 text-white font-bold px-8 py-3 rounded-xl hover:from-purple-800 transition-all">
             Log In Now →
           </Link>
@@ -50,10 +50,10 @@ export default function Register() {
     <div className="min-h-screen bg-bg-lavender py-8 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
-          <Link to="/" className="text-purple-600 hover:text-purple-800 text-sm font-semibold mb-4 inline-block">← Back to Home</Link>
-          <div className="text-4xl mb-3">📚</div>
+          <Link to="/" className="text-purple-700 hover:text-purple-900 text-sm font-semibold mb-4 inline-block">← Back to Home</Link>
+          <img src="/logo.svg" alt="Best in Class Education Center" className="h-16 w-auto mx-auto mb-3" />
           <h1 className="text-3xl font-extrabold text-purple-900">Join BIC Champions!</h1>
-          <p className="text-gray-500 mt-2">Register to start your reading journey 🌟</p>
+          <p className="text-gray-600 mt-2">Register to start your reading journey 🌟</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -70,7 +70,7 @@ export default function Register() {
                   className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none"
                   placeholder="First name"
                 />
-                {errors.first_name && <p className="text-red-500 text-xs mt-1">{errors.first_name.message}</p>}
+                {errors.first_name && <p className="text-red-700 text-xs mt-1">{errors.first_name.message}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Last Name *</label>
@@ -79,7 +79,7 @@ export default function Register() {
                   className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none"
                   placeholder="Last name"
                 />
-                {errors.last_name && <p className="text-red-500 text-xs mt-1">{errors.last_name.message}</p>}
+                {errors.last_name && <p className="text-red-700 text-xs mt-1">{errors.last_name.message}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Date of Birth *</label>
@@ -88,7 +88,7 @@ export default function Register() {
                   {...register('date_of_birth', { required: 'Required' })}
                   className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none"
                 />
-                {errors.date_of_birth && <p className="text-red-500 text-xs mt-1">{errors.date_of_birth.message}</p>}
+                {errors.date_of_birth && <p className="text-red-700 text-xs mt-1">{errors.date_of_birth.message}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Grade *</label>
@@ -99,7 +99,7 @@ export default function Register() {
                   <option value="">Select grade</option>
                   {[1,2,3,4,5,6,7,8].map(g => <option key={g} value={g}>Grade {g}</option>)}
                 </select>
-                {errors.grade && <p className="text-red-500 text-xs mt-1">{errors.grade.message}</p>}
+                {errors.grade && <p className="text-red-700 text-xs mt-1">{errors.grade.message}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">School Name *</label>
@@ -108,7 +108,7 @@ export default function Register() {
                   className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none"
                   placeholder="Your school"
                 />
-                {errors.school_name && <p className="text-red-500 text-xs mt-1">{errors.school_name.message}</p>}
+                {errors.school_name && <p className="text-red-700 text-xs mt-1">{errors.school_name.message}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">City *</label>
@@ -117,7 +117,7 @@ export default function Register() {
                   defaultValue="Bellevue"
                   className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none"
                 />
-                {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city.message}</p>}
+                {errors.city && <p className="text-red-700 text-xs mt-1">{errors.city.message}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">State *</label>
@@ -128,7 +128,7 @@ export default function Register() {
                   <option value="">Select state</option>
                   {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
-                {errors.state && <p className="text-red-500 text-xs mt-1">{errors.state.message}</p>}
+                {errors.state && <p className="text-red-700 text-xs mt-1">{errors.state.message}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Phone (Optional)</label>
@@ -171,7 +171,7 @@ export default function Register() {
                   className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none"
                   placeholder="Parent or guardian full name"
                 />
-                {errors.guardian1_name && <p className="text-red-500 text-xs mt-1">{errors.guardian1_name.message}</p>}
+                {errors.guardian1_name && <p className="text-red-700 text-xs mt-1">{errors.guardian1_name.message}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Relationship *</label>
@@ -182,7 +182,7 @@ export default function Register() {
                   <option value="">Select...</option>
                   {['Mother', 'Father', 'Grandmother', 'Grandfather', 'Aunt', 'Uncle', 'Legal Guardian', 'Other'].map(r => <option key={r} value={r}>{r}</option>)}
                 </select>
-                {errors.guardian1_relationship && <p className="text-red-500 text-xs mt-1">{errors.guardian1_relationship.message}</p>}
+                {errors.guardian1_relationship && <p className="text-red-700 text-xs mt-1">{errors.guardian1_relationship.message}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Phone *</label>
@@ -191,7 +191,7 @@ export default function Register() {
                   className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none"
                   placeholder="Phone number"
                 />
-                {errors.guardian1_phone && <p className="text-red-500 text-xs mt-1">{errors.guardian1_phone.message}</p>}
+                {errors.guardian1_phone && <p className="text-red-700 text-xs mt-1">{errors.guardian1_phone.message}</p>}
               </div>
               <div className="sm:col-span-2">
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Email *</label>
@@ -201,7 +201,7 @@ export default function Register() {
                   className="w-full border border-purple-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-400 outline-none"
                   placeholder="Email address"
                 />
-                {errors.guardian1_email && <p className="text-red-500 text-xs mt-1">{errors.guardian1_email.message}</p>}
+                {errors.guardian1_email && <p className="text-red-700 text-xs mt-1">{errors.guardian1_email.message}</p>}
               </div>
             </div>
           </div>
@@ -221,7 +221,7 @@ export default function Register() {
                 <h2 className="font-bold text-purple-900 flex items-center gap-2 text-lg">
                   <span>👨‍👩‍👧</span> Parent/Guardian 2 (Optional)
                 </h2>
-                <button type="button" onClick={() => setShowGuardian2(false)} className="text-gray-400 hover:text-red-500 text-sm">Remove</button>
+                <button type="button" onClick={() => setShowGuardian2(false)} className="text-gray-600 hover:text-red-700 text-sm">Remove</button>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2">
@@ -251,7 +251,7 @@ export default function Register() {
             🚀 Register for BIC Champions!
           </Button>
 
-          <p className="text-center text-sm text-gray-500">
+          <p className="text-center text-sm text-gray-600">
             Already registered?{' '}
             <Link to="/login" className="text-purple-700 font-semibold hover:text-purple-900">Log In →</Link>
           </p>

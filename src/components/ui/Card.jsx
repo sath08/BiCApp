@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 export default function Card({ children, className = '', hover = false, onClick }) {
   const Component = hover ? motion.div : 'div'
   const motionProps = hover ? {
-    whileHover: { y: -4, boxShadow: '0 20px 40px rgba(107,33,168,0.15)' },
+    whileHover: { y: -4, boxShadow: '0 20px 40px rgba(29,78,137,0.18)' },
     transition: { duration: 0.2 },
   } : {}
 

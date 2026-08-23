@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const COLORS = ['#6B21A8', '#F97316', '#0D9488', '#EAB308', '#EC4899', '#3B82F6']
+const COLORS = ['#1D4E89', '#1B6B34', '#F97316', '#EAB308', '#2F9E52', '#5A93CE']
 
 function Confetti() {
   const pieces = Array.from({ length: 50 }, (_, i) => ({

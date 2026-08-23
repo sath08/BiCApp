@@ -33,7 +33,7 @@ export default function Leaderboard() {
 
   return (
     <div className="space-y-6 pb-20 md:pb-6">
-      <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl p-5 text-white">
+      <div className="bg-gradient-to-r from-yellow-700 to-orange-700 rounded-2xl p-5 text-white">
         <h1 className="text-2xl font-extrabold mb-1">🏆 Leaderboard</h1>
         <p className="text-yellow-100 text-sm">How do you rank among your peers?</p>
       </div>
@@ -56,7 +56,7 @@ export default function Leaderboard() {
 
       <div className="space-y-3">
         <div>
-          <p className="text-xs font-semibold text-gray-500 mb-2">CATEGORY</p>
+          <p className="text-xs font-semibold text-gray-600 mb-2">CATEGORY</p>
           <div className="flex gap-2 flex-wrap">
             {CATEGORY_FILTERS.map(c => (
               <button key={c} onClick={() => setCategory(c)}
@@ -66,7 +66,7 @@ export default function Leaderboard() {
           </div>
         </div>
         <div>
-          <p className="text-xs font-semibold text-gray-500 mb-2">GRADE</p>
+          <p className="text-xs font-semibold text-gray-600 mb-2">GRADE</p>
           <div className="flex gap-2 flex-wrap">
             {GRADE_FILTERS.map(g => (
               <button key={g} onClick={() => setGradeFilter(g)}
@@ -114,15 +114,15 @@ export default function Leaderboard() {
                 {e.anonymous_id}
                 {e.isCurrentUser && <span className="ml-2 text-xs bg-purple-200 text-purple-700 px-2 py-0.5 rounded-full font-bold">YOU</span>}
               </p>
-              <p className="text-xs text-gray-400">Grade {e.grade} • {e.streak}🔥 streak</p>
+              <p className="text-xs text-gray-600">Grade {e.grade} • {e.streak}🔥 streak</p>
             </div>
             <div className="text-right">
               <p className="font-extrabold text-purple-700">{getScore(e)}</p>
-              <p className="text-xs text-gray-400">{category === 'Streaks' ? 'days' : 'points'}</p>
+              <p className="text-xs text-gray-600">{category === 'Streaks' ? 'days' : 'points'}</p>
             </div>
           </motion.div>
         ))}
-        {enriched.length === 0 && <p className="text-center text-gray-400 py-8">No data yet for this filter.</p>}
+        {enriched.length === 0 && <p className="text-center text-gray-600 py-8">No data yet for this filter.</p>}
       </div>
     </div>
   )

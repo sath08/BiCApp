@@ -24,10 +24,10 @@ export default function TeacherDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-teal-700 to-teal-500 rounded-2xl p-6 text-white">
-        <p className="text-teal-200 font-medium mb-1">Welcome back,</p>
+      <div className="bg-gradient-to-r from-teal-700 to-teal-600 rounded-2xl p-6 text-white">
+        <p className="text-white/90 font-medium mb-1">Welcome back,</p>
         <h1 className="text-2xl font-extrabold">{user?.full_name || 'Teacher'} 👩‍🏫</h1>
-        <p className="text-teal-200 text-sm mt-1">Bellevue Reading & Writing Champions</p>
+        <p className="text-white/90 text-sm mt-1">Bellevue Reading & Writing Champions</p>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -52,7 +52,7 @@ export default function TeacherDashboard() {
               <div key={r.id} className="flex items-center justify-between bg-white rounded-xl p-3">
                 <div>
                   <p className="font-semibold text-sm text-gray-800">{r.student_anonymous_id}</p>
-                  <p className="text-xs text-gray-500">{r.essay_type} — {r.book_title}</p>
+                  <p className="text-xs text-gray-600">{r.essay_type} — {r.book_title}</p>
                 </div>
                 <Link to={`/teacher/reviews/${r.id}`} className="text-xs font-bold text-teal-700 bg-teal-50 px-3 py-1.5 rounded-lg hover:bg-teal-100">
                   Review →
@@ -96,12 +96,12 @@ export default function TeacherDashboard() {
               <div key={s.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
                 <div>
                   <p className="font-semibold text-sm text-gray-800">{s.first_name} {s.last_name}</p>
-                  <p className="text-xs text-gray-400">Grade {s.grade} • {s.anonymous_id}</p>
+                  <p className="text-xs text-gray-600">Grade {s.grade} • {s.anonymous_id}</p>
                 </div>
                 <span className="font-bold text-purple-700 text-sm">{s.total_points} XP</span>
               </div>
             ))}
-            {myStudents.length === 0 && <p className="text-sm text-gray-400 text-center py-4">No students assigned yet.</p>}
+            {myStudents.length === 0 && <p className="text-sm text-gray-600 text-center py-4">No students assigned yet.</p>}
           </div>
         </Card>
       </div>

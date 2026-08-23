@@ -35,7 +35,7 @@ export default function SubmissionDetail() {
     return (
       <div className="text-center py-12">
         <div className="text-5xl mb-3">📭</div>
-        <p className="text-gray-500">Essay not found.</p>
+        <p className="text-gray-600">Essay not found.</p>
         <Link to="/student/writing" className="text-purple-600 hover:text-purple-800 font-semibold mt-4 inline-block">← Back to Writing</Link>
       </div>
     )
@@ -55,7 +55,7 @@ export default function SubmissionDetail() {
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div>
             <h1 className="text-xl font-extrabold text-purple-900 mb-1">{essay.book_title}</h1>
-            <p className="text-gray-500 text-sm">by {essay.author}</p>
+            <p className="text-gray-600 text-sm">by {essay.author}</p>
             <div className="flex flex-wrap gap-2 mt-3">
               <span className="text-xs bg-purple-100 text-purple-700 font-semibold px-2.5 py-1 rounded-full">{essay.essay_type}</span>
               <span className="text-xs bg-gray-100 text-gray-600 font-semibold px-2.5 py-1 rounded-full capitalize">{essay.assignment_type}</span>
@@ -63,7 +63,7 @@ export default function SubmissionDetail() {
             </div>
           </div>
           {essay.submitted_at && (
-            <div className="text-sm text-gray-400">
+            <div className="text-sm text-gray-600">
               Submitted {new Date(essay.submitted_at).toLocaleDateString()}
             </div>
           )}
@@ -87,7 +87,7 @@ export default function SubmissionDetail() {
               <h2 className="font-bold text-purple-900">📊 Teacher's Review</h2>
               <div className="text-right">
                 <div className="text-2xl font-extrabold text-purple-700">{totalScore}/{maxScore}</div>
-                <div className="text-xs text-gray-400">Total Score</div>
+                <div className="text-xs text-gray-600">Total Score</div>
               </div>
             </div>
             <div className="space-y-3">
